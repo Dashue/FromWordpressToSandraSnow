@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogExportParsers", "BlogExportParsers\BlogExportParsers.csproj", "{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogExportParsers.Tests", "BlogExportParsers.Tests\BlogExportParsers.Tests.csproj", "{8392A41F-24DF-4EC3-BC8C-72A21A70A6CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlConverters", "HtmlConverters\HtmlConverters.csproj", "{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlConverters.Tests", "HtmlConverters.Tests\HtmlConverters.Tests.csproj", "{4032136E-4BF4-4F35-A25E-B499F79A458D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlParser", "HtmlParser\HtmlParser.csproj", "{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7DFC82A1-0447-4F48-B2E7-C7919B037D7D}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8392A41F-24DF-4EC3-BC8C-72A21A70A6CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8392A41F-24DF-4EC3-BC8C-72A21A70A6CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8392A41F-24DF-4EC3-BC8C-72A21A70A6CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8392A41F-24DF-4EC3-BC8C-72A21A70A6CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4032136E-4BF4-4F35-A25E-B499F79A458D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4032136E-4BF4-4F35-A25E-B499F79A458D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4032136E-4BF4-4F35-A25E-B499F79A458D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4032136E-4BF4-4F35-A25E-B499F79A458D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
