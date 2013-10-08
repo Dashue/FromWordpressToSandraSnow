@@ -178,6 +178,23 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
+        [Fact]
+        public void Should_convert_blockquote()
+        {
+            var html = "<blockquote>This is blockquoted</blockquote>";
+            var expected = "> This is blockquoted";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+        [Fact]
+        public void Should_convert_blockquote_inside_blockquote()
+        {
+            var html = "<blockquote>This is blockquoted<blockquote>This is nested blockquoted</blockquote></blockquote>";
+            var expected = "> This is blockquoted\n\n> > This is nested blockquoted";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
 
         //[Fact]
         //public void Should_convert_span()
@@ -206,29 +223,19 @@ namespace HtmlConverters.Tests
         //    Assert.Equal(expected, _converter.Convert(html));
         //}
 
-        //        [Fact] public void should be able to convert "<blockquote>This is blockquoted</blockquote>" to "> This is blockquoted"", function() {
-        //            var md = markdown("<blockquote>This is blockquoted</blockquote>");
-        //            expect(md).toMatch("> This is blockquoted");
-        //        });
+        //enable when wordwrap ie enabled
+        //	var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
+        //	html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
+        //	[Fact] public void should be able to convert a block of html", function() {
+        //		var md = markdown(html);
+        //		var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
+        //		expect(md).toEqual(md_str);
+        //	});
 
-        //        [Fact] public void should be able to convert nested blockquotes", function() {
-        //            var md = markdown("<blockquote>This is blockquoted<blockquote>This is nested blockquoted</blockquote></blockquote>");
-        //            expect(md).toMatch("> This is blockquoted\n\n> > This is nested blockquoted");
-        //        });
-
-        //        //enable when wordwrap ie enabled
-        //    //	var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
-        //    //	html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
-        //    //	[Fact] public void should be able to convert a block of html", function() {
-        //    //		var md = markdown(html);
-        //    //		var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
-        //    //		expect(md).toEqual(md_str);
-        //    //	});
-
-        //        [Fact] public void should be able to convert unordered list", function() {
-        //            var md = markdown("<ul><li>item a</li><li>item b</li></ul>");
-        //            expect(md).toMatch(/\* item a\n\* item b\n/);
-        //        });
+        //[Fact] public void should be able to convert unordered list", function() {
+        //    var md = markdown("<ul><li>item a</li><li>item b</li></ul>");
+        //    expect(md).toMatch(/\* item a\n\* item b\n/);
+        //});
 
         //        [Fact] public void should be able to convert ordered list", function() {
         //            var md = markdown("<ol><li>item 1</li><li>item 2</li></ol>");

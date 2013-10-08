@@ -61,7 +61,7 @@ namespace HtmlConverters
                     {
                         break;
                     }
-                    else if (Regex.IsMatch(HtmlToMarkdownConverterHelper.peek(nodeStack.ToList()), @"!\s+$"))
+                    else if (Regex.IsMatch(nodeStack.Peek(), @"!\s+$"))
                     {
                         nodeStack.Push(Markdown.Tags[tag]);
                     }

@@ -34,8 +34,10 @@ namespace HtmlConverters
             //if(blockquoteStack.length > 0 && peekTillNotEmpty(nodeList).endsWith("\n")) {
             if (blockquoteStack.Count > 0)
             {
-                throw new NotImplementedException();
-                //nodeStack.Push(blockquoteStack.join(""));
+                var array = blockquoteStack.ToArray();
+                Array.Reverse(array);
+
+                nodeStack.Push(string.Join(string.Empty, array));
             }
 
             nodeStack.Push(text);
