@@ -15,7 +15,7 @@ namespace HtmlParser
             _items = new List<string>();
         }
 
-        public string Last()
+        public string last()
         {
             if (_items.Count == 0)
             {
@@ -39,6 +39,11 @@ namespace HtmlParser
         public List<string> ToArray()
         {
             return new List<string>(_items);
+        }
+
+        public string this[int i]
+        {
+            get { return _items[i]; }
         }
     }
 }

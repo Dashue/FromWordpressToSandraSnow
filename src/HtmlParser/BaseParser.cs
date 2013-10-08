@@ -13,9 +13,13 @@ namespace HtmlParser
     public abstract class BaseParser
     {
         int _index;
-        readonly HtmlStack _stack = new HtmlStack();
+        readonly HtmlStack stack = new HtmlStack();
         private string last;
         private readonly List<string> _htmlBlocks = new List<string>();
+        private bool isChars;
+        private int index;
+
+        private List<string> special = new List<string> { "script", "style" };
 
         protected void Parse(string html)
         {
@@ -23,170 +27,190 @@ namespace HtmlParser
 
             while (false == string.IsNullOrWhiteSpace(html))
             {
+                isChars = true;
+
                 // Make sure we're not in a script or style element
-                if (_stack.Length == 0 || (!string.IsNullOrWhiteSpace(_stack.Last()) && false == ExcludedTags.Contains(_stack.Last())))
+                if (false == string.IsNullOrWhiteSpace(stack.last()) || false == special.Contains(stack.last()))
                 {
+
                     // Comment
                     if (html.IndexOf("<!--") == 0)
                     {
-                        _index = html.IndexOf("-->");
+                        index = html.IndexOf("-->");
 
-                        if (_index >= 0)
+                        if (index >= 0)
                         {
-                            var content = html.Substring(4, _index);
-                            comment(content);
-                            html = html.Substring(_index + 3);
-                            _htmlBlocks.Add(content);
+                            comment(html.Substring(4, index));
+                            html = html.Substring(index + 3);
+                            isChars = false;
                         }
 
                         // end tag
                     }
                     else if (html.IndexOf("</") == 0)
                     {
-                        var regexMatch = RegularExpressions.IsEndTag.Match(html);
+                        Match match = RegularExpressions.IsEndTag.Match(html);
 
-                        if (regexMatch.Success)
+                        if (match.Success)
                         {
-                            var content = regexMatch.Groups[1].Value;
+                            var tagName = match.Groups[1].Value;
 
-                            html = html.Substring(regexMatch.Groups[0].Length);
-                            parseEndTag(content);
-                            //match[0].replace( IsEndTag, parseEndTag );
-                            _htmlBlocks.Add(content);
+                            html = html.Substring(match.Groups[0].Value.Length);
+
+                            //match.Groups[0].Value.Replace( endTag, parseEndTag );
+                            parseEndTag(match.Groups[0].Value, tagName);
+                            isChars = false;
                         }
 
                         // start tag
                     }
                     else if (html.IndexOf("<") == 0)
                     {
-                        var regexMatch = RegularExpressions.IsStartTag.Match(html);
+                        var match = RegularExpressions.StartTag.Match(html);
 
-                        if (regexMatch.Success)
+                        if (match.Success)
                         {
-                            var content = regexMatch.Groups[1].Value;
+                            html = html.Substring(match.Groups[0].Length);
 
-                            html = html.Substring(regexMatch.Groups[0].Length);
-                            parseStartTag(content, regexMatch.Groups[2].Value, regexMatch.Groups[3].Value);
-                            //match[0].replace( IsStartTag, parseStartTag );
+                            var tagName = match.Groups[1].Value;
 
-                            _htmlBlocks.Add(content);
+                            //match[0].Replace(startTag, parseStartTag);
+                            parseStartTag(match.Groups[0].Value, tagName, match.Groups[2].Value, match.Groups[3].Value);
+                            isChars = false;
                         }
                     }
-                    else if (false == ExcludedTags.Contains(_stack.Last()))
-                    {
-                        _index = html.IndexOf("<");
 
-                        var text = _index < 0 ? html : html.Substring(0, _index);
-                        html = _index < 0 ? "" : html.Substring(_index);
+                    if (isChars)
+                    {
+                        index = html.IndexOf("<");
+
+                        var text = index < 0 ? html : html.Substring(0, index);
+                        html = index < 0 ? "" : html.Substring(index);
 
                         chars(text);
-                        _htmlBlocks.Add(text);
                     }
 
                 }
                 else
                 {
-                    var regexMatch = new Regex("(.*)<\\/" + _stack.Last() + "[^>]*>").Match(html);
-                    var text = regexMatch.Groups[1].Value;
+                    throw new NotImplementedException();
+                    //html = html.Replace(new RegExp("(.*)<\/" + stack.last() + "[^>]*>"), function(all, text){
+                    //    text = text.Replace(/<!--(.*?)-->/g, "$1")
+                    //        .Replace(/<!\[CDATA\[(.*?)]]>/g, "$1");
 
-                    text = Regex.Replace(text, @"<!--(.*?)-->/g", "$1");
-                    text = Regex.Replace(text, @"<!\[CDATA\[(.*?)]]>/g", "$1");
+                    //    if ( chars )
+                    //        chars( text );
 
-                    if (false == ExcludedTags.Contains(_stack.Last()))
-                    {
-                        chars(text);
-                    }
-
-                    html = "";
-
-                    parseEndTag(_stack.Last());
+                    //    return "";
                 }
 
-                if (html == last)
-                {
-                    throw new Exception(html);
-                }
-
-                last = html;
+                //parseEndTag( "", stack.last() );
             }
 
-            // Clean up any remaining tags
-            completedParsing();
+            if (html == last)
+                throw new Exception("Parse Error: " + html);
+            last = html;
+
+            parseEndTag("", "");
         }
 
-        private void completedParsing()
-        {
-            _stack.Length = 0;
-            completed(_htmlBlocks);
-        }
-
-        private void parseStartTag(string tagName, string rest, string unaryStr)
+        public void parseStartTag(string tag, string tagName, string rest, string unaryStr)
         {
             if (HtmlTags.Block.Contains(tagName))
             {
-                while (false == string.IsNullOrWhiteSpace(_stack.Last()) && HtmlTags.Inline.Contains(_stack.Last()))
+                while (false == string.IsNullOrWhiteSpace(stack.last()) && HtmlTags.Inline.Contains(stack.last()))
                 {
-                    parseEndTag(_stack.Last());
+                    parseEndTag("", stack.last());
                 }
             }
 
-            if (HtmlTags.SelfClosing.Contains(tagName) && _stack.Last() == tagName)
+            if (HtmlTags.SelfClosing.Contains(tagName) && stack.last() == tagName)
             {
-                parseEndTag(tagName);
+                parseEndTag("", tagName);
             }
 
             bool parsedUnary;
             bool.TryParse(unaryStr, out parsedUnary);
             var unary = HtmlTags.Empty.Contains(tagName) || parsedUnary;
 
-            _stack.push(tagName);
+            if (!unary)
+            {
+                stack.push(tagName);
+            }
 
             var attrs = new Dictionary<string, HtmlAttribute>();
 
-            var regexMatch = RegularExpressions.IsAttribute.Matches(rest);
-
-            for (int i = 0; i < regexMatch.Count; i++)
+            var match = RegularExpressions.Attribute.Match(rest);
+            if (match.Success)
             {
-                Match match = regexMatch[i];
-                var value =
-                  match.Groups[2].Value != string.Empty ? match.Groups[2].Value :
-                            match.Groups[3].Value != string.Empty ? match.Groups[3].Value :
-                            match.Groups[4].Value != string.Empty ? match.Groups[4].Value :
-                            HtmlTags.FillAttrs.Contains(match.Groups[1].Value) ? match.Groups[1].Value : string.Empty;
+                var attributeName = match.Groups[1].Value;
+                string value;
 
-                attrs.Add(match.Groups[1].Value, new HtmlAttribute
+                if (false == string.IsNullOrWhiteSpace(match.Groups[2].Value))
                 {
-                    Name = match.Groups[1].Value.ToLower(),
-                    Value = value
-                });
+                    value = match.Groups[2].Value;
+                }
+                else if (false == string.IsNullOrWhiteSpace(match.Groups[3].Value))
+                {
+                    value = match.Groups[3].Value;
+                }
+                else if (false == string.IsNullOrWhiteSpace(match.Groups[4].Value))
+                {
+                    value = match.Groups[4].Value;
+                }
+                else if (HtmlTags.FillAttrs.Contains(tagName))
+                {
+                    value = tagName;
+                }
+                else
+                {
+                    value = string.Empty;
+                }
+
+                var htmlAttribute = new HtmlAttribute
+                    {
+                        Name = attributeName,
+                        Value = value,
+                    };
+
+                attrs.Add(attributeName, htmlAttribute);
             }
 
             start(tagName, attrs, unary);
         }
 
-        private void parseEndTag(string tagName)
+        public void parseEndTag(string tag, string tagName)
         {
             int pos;
-            // Find the closest opened tag of the same type
-            for (pos = _stack.Length - 1; pos >= 0; pos--)
+            if (string.IsNullOrWhiteSpace(tagName))
             {
-                if (_stack.At(pos) == tagName)
+                // If no tag name is provided, clean shop
+                pos = 0;
+            }
+            else
+            {
+                // Find the closest opened tag of the same type
+                for (pos = stack.Length - 1; pos >= 0; pos--)
                 {
-                    break;
+                    if (stack[pos] == tagName)
+                    {
+                        break;
+                    }
                 }
             }
 
             if (pos >= 0)
             {
-                // Close all the open elements, up the htmlStack
-                for (var i = _stack.Length - 1; i >= pos; i--)
+                // Close all the open elements, up the stack
+                for (var i = stack.Length - 1; i >= pos; i--)
                 {
-                    end(_stack.At(i));
+                    end(stack[i]);
                 }
 
-                // Remove the open elements from the htmlStack
-                _stack.Length = pos;
+                // Remove the open elements from the stack
+                stack.Length = pos;
             }
+
         }
 
         protected abstract void comment(string text);

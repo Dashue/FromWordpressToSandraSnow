@@ -45,20 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlToMarkdownTests.cs" />
-    <Compile Include="HtmlToMarkdown\BlockqouteTests.cs" />
-    <Compile Include="HtmlToMarkdown\BoldTests.cs" />
-    <Compile Include="HtmlToMarkdown\BrTests.cs" />
-    <Compile Include="HtmlToMarkdown\EmptyTests.cs" />
-    <Compile Include="HtmlToMarkdown\HeaderTests.cs" />
-    <Compile Include="HtmlToMarkdown\HrTests.cs" />
-    <Compile Include="HtmlToMarkdown\ImgTests.cs" />
-    <Compile Include="HtmlToMarkdown\ItalicTests.cs" />
-    <Compile Include="HtmlToMarkdown\LinkTests.cs" />
-    <Compile Include="HtmlToMarkdown\ListTests.cs" />
-    <Compile Include="HtmlToMarkdown\ParagraphTests.cs" />
-    <Compile Include="HtmlToMarkdown\PreTests.cs" />
-    <Compile Include="HtmlToMarkdown\SpanTests.cs" />
-    <Compile Include="HtmlToMarkdown\TitleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +59,9 @@
       <Project>{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}</Project>
       <Name>HtmlParser</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HtmlToMarkdown\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

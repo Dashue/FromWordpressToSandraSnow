@@ -39,11 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlToMarkdownConverterEnd.cs" />
+    <Compile Include="HtmlToMarkdownConverterChars.cs" />
     <Compile Include="HtmlToDomConverter.cs" />
     <Compile Include="HtmlToMarkdownConverter.cs" />
+    <Compile Include="HtmlToMarkdownConverterHelper.cs" />
     <Compile Include="HtmlToXmlConverter.cs" />
     <Compile Include="IHtmlConverter.cs" />
+    <Compile Include="Markdown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HtmlToMarkdownConverterStart.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HtmlParser\HtmlParser.csproj">
