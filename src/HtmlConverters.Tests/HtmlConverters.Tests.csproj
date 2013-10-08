@@ -56,6 +56,7 @@
     <Compile Include="HtmlToMarkdown\LinkTests.cs" />
     <Compile Include="HtmlToMarkdown\ListTests.cs" />
     <Compile Include="HtmlToMarkdown\ParagraphTests.cs" />
+    <Compile Include="HtmlToMarkdown\PreTests.cs" />
     <Compile Include="HtmlToMarkdown\SpanTests.cs" />
     <Compile Include="HtmlToMarkdown\TitleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

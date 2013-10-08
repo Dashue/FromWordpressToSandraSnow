@@ -13,7 +13,6 @@ namespace HtmlParser
     public abstract class BaseParser
     {
         int _index;
-        bool _isCharacters;
         readonly HtmlStack _stack = new HtmlStack();
         private string last;
         private readonly List<string> _htmlBlocks = new List<string>();
@@ -24,12 +23,9 @@ namespace HtmlParser
 
             while (false == string.IsNullOrWhiteSpace(html))
             {
-                _isCharacters = true;
-
                 // Make sure we're not in a script or style element
-                if (!string.IsNullOrWhiteSpace(_stack.Last()) || false == ExcludedTags.Contains(_stack.Last()))
+                if (_stack.Length == 0 || (!string.IsNullOrWhiteSpace(_stack.Last()) && false == ExcludedTags.Contains(_stack.Last())))
                 {
-
                     // Comment
                     if (html.IndexOf("<!--") == 0)
                     {
@@ -40,7 +36,6 @@ namespace HtmlParser
                             var content = html.Substring(4, _index);
                             comment(content);
                             html = html.Substring(_index + 3);
-                            _isCharacters = false;
                             _htmlBlocks.Add(content);
                         }
 
@@ -57,7 +52,6 @@ namespace HtmlParser
                             html = html.Substring(regexMatch.Groups[0].Length);
                             parseEndTag(content);
                             //match[0].replace( IsEndTag, parseEndTag );
-                            _isCharacters = false;
                             _htmlBlocks.Add(content);
                         }
 
@@ -74,13 +68,11 @@ namespace HtmlParser
                             html = html.Substring(regexMatch.Groups[0].Length);
                             parseStartTag(content, regexMatch.Groups[2].Value, regexMatch.Groups[3].Value);
                             //match[0].replace( IsStartTag, parseStartTag );
-                            _isCharacters = false;
 
                             _htmlBlocks.Add(content);
                         }
                     }
-
-                    if (_isCharacters)
+                    else if (false == ExcludedTags.Contains(_stack.Last()))
                     {
                         _index = html.IndexOf("<");
 
@@ -100,7 +92,10 @@ namespace HtmlParser
                     text = Regex.Replace(text, @"<!--(.*?)-->/g", "$1");
                     text = Regex.Replace(text, @"<!\[CDATA\[(.*?)]]>/g", "$1");
 
-                    chars(text);
+                    if (false == ExcludedTags.Contains(_stack.Last()))
+                    {
+                        chars(text);
+                    }
 
                     html = "";
 
@@ -140,13 +135,11 @@ namespace HtmlParser
                 parseEndTag(tagName);
             }
 
-            bool ignore;
-            var unary = HtmlTags.Empty.Contains(tagName) || bool.TryParse(unaryStr, out ignore);
+            bool parsedUnary;
+            bool.TryParse(unaryStr, out parsedUnary);
+            var unary = HtmlTags.Empty.Contains(tagName) || parsedUnary;
 
-            if (!unary)
-            {
-                _stack.push(tagName);
-            }
+            _stack.push(tagName);
 
             var attrs = new Dictionary<string, HtmlAttribute>();
 
@@ -156,9 +149,9 @@ namespace HtmlParser
             {
                 Match match = regexMatch[i];
                 var value =
-                  match.Groups[2] != null ? match.Groups[2].Value :
-                            match.Groups[3] != null ? match.Groups[3].Value :
-                            match.Groups[4] != null ? match.Groups[4].Value :
+                  match.Groups[2].Value != string.Empty ? match.Groups[2].Value :
+                            match.Groups[3].Value != string.Empty ? match.Groups[3].Value :
+                            match.Groups[4].Value != string.Empty ? match.Groups[4].Value :
                             HtmlTags.FillAttrs.Contains(match.Groups[1].Value) ? match.Groups[1].Value : string.Empty;
 
                 attrs.Add(match.Groups[1].Value, new HtmlAttribute

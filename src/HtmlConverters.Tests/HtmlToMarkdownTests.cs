@@ -24,47 +24,16 @@ namespace HtmlConverters.Tests
             Assert.Equal("This has **blocked and _italicized_** texts.", _converter.Convert(html));
         }
 
-        //        it("should convert elements with child elements surrounded by whitespace", function() {
-        //            var html = "<div>\n\t<h2>\n\t\t<a href='http://finance.yahoo.com'>Yahoo! Finance</a>\n\t</h2>\n</div>";
-        //            md = markdown(html);
-        //            expect(md).toEqual("## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com");
+        [Fact]
+        public void Should_convert_elements_with_child_elements_surrounded_by_whitespace()
+        {
+            Assert.Equal("**Hello**", _converter.Convert("<span>\n\t<b>Hello</b>\n\t</span>"));
 
-        //            html = "<span>\n\t<b>Hello</b>\n\t</span>";
-        //            md = markdown(html);
-        //            expect(md).toEqual(" **Hello** ");
-        //        });
+            var html = "<div>\n\t<h2>\n\t\t<a href='http://finance.yahoo.com'>Yahoo! Finance</a>\n\t</h2>\n</div>";
+            var expected = "## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com";
 
-
-        //        it("should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing", function() {
-        //            var md = markdown("<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>", {"inlineStyle": true});
-        //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        it("should convert image wrapped in anchor to markdown that can be rendered using showdown - reference style parsing", function() {
-        //            var md = markdown("<a href='/exec/j/4/?pid=62838&lno=1&afsrc=1'><img alt='Example Image' title='Free example image' src='/img/62838.jpg'></a>", {"inlineStyle": false});
-        //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
-
-        //            var html = "<a href='/exec/j/4/?pid=62838&lno=1&afsrc=1'>\n\t<img alt='Example Image' title='Free example image' src='/img/62838.jpg'>\n\t</a>";
-        //            md = markdown(html, {"inlineStyle": false});
-        //            expect(md).toEqual(expected);
-
-        //        });
-
-        //        it("should output only text of empty links", function() {
-        //            var md = markdown("<a href=''>Empty Link Text</a>", {"inlineStyle": true});
-        //            var expected = "Empty Link Text";
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        //tags that have no parsing rules e.g. form elements 'head', 'style', script', 'link' 'option', 'noscript', 'noframes', 'input', 'button', 'select', 'textarea', and 'label'
-        //        it("should not convert any elements that have no parsing rules. ", function() {
-        //            var html = "<head><link rel='openid.delegate' href='http://jeresig.livejournal.com/'/>";
-        //            html +=	"<script src='http://ejohn.org/files/retweet.js'></script></head>";
-
-        //            var md = markdown(html);
-        //            expect(md).toEqual("");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
         //        //tables
         //        it("should be able to convert tables", function() {
@@ -195,86 +164,9 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        it("should be able to convert pre block", function() {
-        //            var html = "<pre>";
-        //            html += "	void main(String[] args) {\n";
-        //            html += "		System.out.println(\"Hello Markdown\");\n";
-        //            html += "	}";
-        //            html += "</pre>";
 
-        //            var expected = "    " + "	void main(String[] args) {\n";
-        //            expected += "    " + "		System.out.println(\"Hello Markdown\");\n";
-        //            expected += "    " + "	}";
-        //            expected += "\n\n";
-
-        //            var md = markdown(html);
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        it("should be able to convert pre block with html tags", function() {
-        //            var html = "<pre>\n";
-        //            html += "<div a=\"b\">\n";
-        //            html += "	<span>this is span inside pre block</span>\n";
-        //            html += "	this is paragraph inside pre block\n";
-        //            html += "</div>";
-        //            html += "</pre>";
-
-        //            var expected = "    " + "\n\n\n";
-        //            expected += "    " + "	this is span inside pre block\n";
-        //            expected += "    " + "	this is paragraph inside pre block\n";
-        //            expected += "    " + "\n";
-        //            expected += "\n";
-
-        //            var md = markdown(html);
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        it("should be able to convert <pre><code>...</code></pre> blocks", function() {
-        //            var html= "<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}";
-        //            html+= "\nQuote string";
-        //            html+= "\n{% endblockquote %}";
-        //            html+= "\n</code></pre>";
-
-        //            var md = markdown(html);
-        //            expected="    {% blockquote [author[, source]] [link] [source_link_title] %}";
-        //            expected+="\n    Quote string";
-        //            expected+="\n    {% endblockquote %}";
-        //            expected+="\n    ";
-        //            expected+="\n\n";
-
-        //            expect(md).toEqual(expected);
-        //        });
         //    });
         //}
-
-        //describe("markdownDOMParser", function() {
-        //    it("parser function should be able to echo input html", function() {
-        //        var html = "<div><span id=\"test-id\"> Hmm <br/> Hello markdown converter </span><!-- this is comment --></div>";
-        //        var result ="";
-
-        //        markdownHTMLParser(html, {
-        //            start: function(tag, attrs, unary) {
-        //                result+="<"+tag.toLowerCase();
-
-        //                for ( var i = 0; i < attrs.length; i++ ) {
-        //                    result += " " + attrs[i].name + '="' + attrs[i].value + '"';
-        //                }
-
-        //                result += (unary ? "/" : "") + ">";
-        //            },
-        //            chars: function(text) {
-        //                result += text;
-        //            },
-        //            end: function(tag) {
-        //                result+="</"+tag.toLowerCase()+">";
-        //            },
-        //            comment: function(text) {
-        //                result += "<!--" + text + "-->";
-        //            }
-        //        });
-        //        expect(html).toEqual(result);
-        //    });
-        //});
 
         //TODO add test for block function
         //TODO test bookmarklet links

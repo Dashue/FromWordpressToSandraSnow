@@ -38,6 +38,15 @@ namespace HtmlConverters.Tests.HtmlToMarkdown
             Assert.Equal(expected, _converter.Convert(html));
         }
 
+        [Fact]
+        public void Should_convert_image_wrapped_in_anchor_to_markdown()
+        {
+            var html = "<a href='/exec/j/4/?pid=62838&lno=1&afsrc=1'><img alt='Example Image' title='Free example image' src='/img/62838.jpg'></a>";
+            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
         public class InlineTests
         {
             private HtmlToMarkdownConverter _converter;
@@ -45,6 +54,15 @@ namespace HtmlConverters.Tests.HtmlToMarkdown
             public InlineTests()
             {
                 _converter = new HtmlToMarkdownConverter(true);
+            }
+
+            [Fact]
+            public void Should_convert_image_wrapped_in_anchor_to_markdown()
+            {
+                var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
+                var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
+
+                Assert.Equal(expected, _converter.Convert(html));
             }
 
             [Fact]

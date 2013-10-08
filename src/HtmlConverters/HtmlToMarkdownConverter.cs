@@ -51,7 +51,7 @@ namespace HtmlConverters
 
         private readonly List<string> _excludedTags = new List<string>
             {
-                "script", "noscript", "object", "iframe", "frame", "head", "style", "label"
+                "button", "frame", "head", "input", "iframe", "label", "link", "noframes", "noscript", "object", "option", "script", "select", "style", "textarea"
             };
 
         private bool _inlineStyle;
@@ -216,6 +216,7 @@ namespace HtmlConverters
                 builder.Append(node);
             }
 
+            nodeStack.Clear();
             return builder.ToString();
         }
 
@@ -228,7 +229,7 @@ namespace HtmlConverters
         {
             if (preStack.Count > 0)
             {
-                text = Regex.Replace(text, "\n/g", "\n    ");
+                text = Regex.Replace(text, "\n/g", "\n");
             }
             else if (string.IsNullOrWhiteSpace(text))
             {
@@ -362,32 +363,17 @@ namespace HtmlConverters
                     nodeStack.Push("[");
                     break;
                 case "img":
-                    //var attribs = convertAttrs(attributes);
-                    string alt = string.Empty;
-                    string title = string.Empty;
-                    string url = null;
+                    string alt, title, url;
 
-                    if (attributes.ContainsKey("src"))
-                    {
-                        url = attributes["src"].Value;
-                    }
+                    url = attributes.ContainsKey("src") ? attributes["src"].Value : url = "";
 
                     if (string.IsNullOrWhiteSpace(url))
                     {
                         break;
                     }
 
-                    if (attributes.ContainsKey("alt"))
-                    {
-                        alt = attributes["alt"].Value;
-
-                    }
-
-                    if (attributes.ContainsKey("title") != null)
-                    {
-                        title = attributes["title"].Value;
-
-                    }
+                    alt = attributes.ContainsKey("alt") ? attributes["alt"].Value.Trim() : alt = "";
+                    title = attributes.ContainsKey("title") ? attributes["title"].Value : title = "";
 
                     // if parent of image tag is nested in anchor tag use inline style
                     if (!_inlineStyle && false == peekTillNotEmpty(nodeStack).StartsWith("["))
@@ -420,17 +406,8 @@ namespace HtmlConverters
                         {
                             EndBlock();
                         }
-                        string fixedTitle;
 
-                        if (string.IsNullOrWhiteSpace(title))
-                        {
-                            fixedTitle = string.Empty;
-                        }
-                        else
-                        {
-                            fixedTitle = " \"" + title + "\"";
-                        }
-
+                        var fixedTitle = (false == string.IsNullOrWhiteSpace(title) ? " \"" + title + "\"" : "");
                         nodeStack.Push("![" + alt + "](" + url + fixedTitle + ")");
 
                         if (false == peekTillNotEmpty(nodeStack).StartsWith("["))
@@ -447,7 +424,7 @@ namespace HtmlConverters
                 case "pre":
                     EndBlock();
                     preStack.Push(true);
-                    nodeStack.Push("    ");
+                    //nodeStack.Push("    ");
                     break;
                 case "table":
                     nodeStack.Push("<table>");

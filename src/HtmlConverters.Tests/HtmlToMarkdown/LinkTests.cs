@@ -40,6 +40,14 @@ namespace HtmlConverters.Tests.HtmlToMarkdown
             }
 
             [Fact]
+            public void Should_output_only_text_of_empty_links()
+            {
+                var html = "<a href=''>Empty Link Text</a>";
+                var expected = "Empty Link Text";
+                Assert.Equal(expected, _converter.Convert(html));
+            }
+
+            [Fact]
             public void Should_convert_links_inline_style()
             {
                 var html = "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";

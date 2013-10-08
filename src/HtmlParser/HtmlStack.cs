@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HtmlParser
 {
@@ -30,6 +31,7 @@ namespace HtmlParser
 
         public void push(string tagName)
         {
+            Console.WriteLine(tagName);
             _items.Add(tagName);
             Length++;
         }
