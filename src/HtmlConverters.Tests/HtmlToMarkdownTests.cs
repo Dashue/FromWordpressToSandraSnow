@@ -97,62 +97,114 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
+        [Fact]
+        public void Should_trim_text_inside_elements()
+        {
+            var html = "<strong> String </strong>";
+            var expected = "**String**";
 
-        //        [Fact] public void should be able trim text inside inline elements", function() {
-        //            var md = markdown("<strong> String </strong>");
-        //            expect(md).toMatch(/\*{2}String\*{2}/);
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert "This has a <strong>block</strong> word" to "This has a **block** word"", function() {
-        //            var md = markdown("This has a <strong>block</strong> word");
-        //            expect(md).toMatch(/This has a \*{2}block\*{2} word/);
-        //        });
+        [Fact]
+        public void Should_convert_strong_inside_text()
+        {
+            var html = "This has a <strong>block</strong> word";
+            var expected = "This has a **block** word";
 
-        //        [Fact] public void should be able to convert "<hr />" to "- - -\\n\\n"", function() {
-        //            var md = markdown("<hr />");
-        //            expect(md).toEqual("- - -\n\n");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert "<br/>" to "  \\n"", function() {
-        //            var md = markdown("this is text before break<br/>this is text after break");
-        //            expect(md).toMatch("  \n");
-        //        });
+        [Fact]
+        public void Should_convert_hr()
+        {
+            var html = "<hr />";
+            var expected = "- - -\n\n";
 
-        //        [Fact] public void should be able to convert "This has <strong>blocked and <em>italicized</em></strong> texts." to "This has **blocked and _italicized_** texts."", function() {
-        //            var md = markdown("This has <strong>blocked and <em>italicized</em></strong> texts.");
-        //            expect(md).toMatch(/This has \*{2}blocked and \_italicized\_\*{2} texts\./);
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert "this is text before hr<hr/>this is text after hr" to "this is text before hr  \\nthis is text after hr"", function() {
-        //            var md = markdown("this is text before hr<hr/>this is text after hr");
-        //            expect(md).toMatch("this is text before hr\n\n- - -\n\nthis is text after hr");
-        //        });
+        [Fact]
+        public void Should_convert_br()
+        {
+            var html = "<br/>";
+            var expected = "  \n";
 
-        //        [Fact] public void should be able to convert "this is text before break<br/>this is text after break" to "this is text before break  \\nthis is text after break"", function() {
-        //            var md = markdown("this is text before break<br/>this is text after break");
-        //            expect(md).toMatch("this is text before break  \nthis is text after break");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert "<p>This is a paragraph. This is the second sentence.</p>" to "This is a paragraph. This is the second sentence.\\n\\n"", function() {
-        //            var md = markdown("<p>This is a paragraph. This is the second sentence.</p>");
-        //            expect(md).toEqual("This is a paragraph. This is the second sentence.\n\n");
-        //        });
+        [Fact]
+        public void Should_convert_strong_and_em_inside_text()
+        {
+            var html = "This has <strong>blocked and <em>italicized</em></strong> texts.";
+            var expected = "This has **blocked and _italicized_** texts.";
 
-        //        [Fact] public void should be able to convert "this is text before paragraph<p>This is a paragraph</p>this is text after paragraph" to "this is text before paragraph\nThis is a paragraph\n\nthis is text after paragraph"", function() {
-        //            var md = markdown("this is text before paragraph<p>This is a paragraph</p>this is text after paragraph");
-        //            expect(md).toEqual("this is text before paragraph\n\nThis is a paragraph\n\nthis is text after paragraph");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert span element", function() {
-        //            var md = markdown("<span>this is span element</span>");
-        //            expect(md).toEqual(" this is span element ");
+        [Fact]
+        public void Should_convert_hr_inside_text()
+        {
+            var html = "this is text before hr<hr/>this is text after hr";
+            var expected = "this is text before hr\n\n- - -\n\nthis is text after hr";
 
-        //            md = markdown("before<span>this is span element</span>after");
-        //            expect(md).toEqual("before this is span element after");
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //            md = markdown("before <span>this is span element</span> after");
-        //            expect(md).toEqual("before this is span element after");
-        //        });
+        [Fact]
+        public void Should_convert_br_inside_text()
+        {
+            var html = "this is text before break<br/>this is text after break";
+            var expected = "this is text before break  \nthis is text after break";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+        [Fact]
+        public void Should_convert_p()
+        {
+            var html = "<p>This is a paragraph. This is the second sentence.</p>";
+            var expected = "This is a paragraph. This is the second sentence.\n\n";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+        [Fact]
+        public void Should_convert_p_inside_text()
+        {
+            var html = "this is text before paragraph<p>This is a paragraph</p>this is text after paragraph";
+            var expected = "this is text before paragraph\n\nThis is a paragraph\n\nthis is text after paragraph";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+
+        //[Fact]
+        //public void Should_convert_span()
+        //{
+        //    var html = "<span>this is span element</span>";
+        //    var expected = " this is span element ";
+
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
+
+        //[Fact]
+        //public void Should_convert_span_inside_text_without_spaces()
+        //{
+        //    var html = "before<span>this is span element</span>after";
+        //    var expected = "before this is span element after";
+
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
+
+        //[Fact]
+        //public void Should_convert_span_inside_text_with_spaces()
+        //{
+        //    var html = "before <span>this is span element</span> after";
+        //    var expected = "before this is span element after";
+
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
         //        [Fact] public void should be able to convert "<blockquote>This is blockquoted</blockquote>" to "> This is blockquoted"", function() {
         //            var md = markdown("<blockquote>This is blockquoted</blockquote>");

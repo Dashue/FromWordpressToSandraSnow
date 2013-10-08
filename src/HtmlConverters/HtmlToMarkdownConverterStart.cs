@@ -15,6 +15,17 @@ namespace HtmlConverters
             {
                 return;
             }
+            switch (tag)
+            {
+                case "p":
+                case "div":
+                case "table":
+                case "tbody":
+                case "tr":
+                case "td":
+                    block(false);
+                    break;
+            }
 
             switch (tag)
             {
@@ -50,19 +61,11 @@ namespace HtmlConverters
                     {
                         break;
                     }
-                    else if (Regex.IsMatch(nodeStack.Peek(), @"!\s+$"))
+                    else if (Regex.IsMatch(HtmlToMarkdownConverterHelper.peek(nodeStack.ToList()), @"!\s+$"))
                     {
                         nodeStack.Push(Markdown.Tags[tag]);
                     }
                     break;
-                //case "p":
-                //case "div":
-                //case "table":
-                //case "tbody":
-                //case "tr":
-                //case "td":
-                //    block();
-                //    break;
                 case "ul":
                 case "ol":
                 case "dl":

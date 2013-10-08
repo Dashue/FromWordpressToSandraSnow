@@ -67,7 +67,7 @@ namespace HtmlConverters
 
         public static string peekTillNotEmpty(List<string> list)
         {
-            for (var i = 0; i >= list.Count - 1; i++)
+            for (var i = 0; i < list.Count; i++)
             {
                 if (list[i] != "")
                 {
