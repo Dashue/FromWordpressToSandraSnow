@@ -73,7 +73,7 @@ namespace HtmlConverters
                     // lists are block elements
                     if (listTagStack.Count > 1)
                     {
-                        HtmlToMarkdownConverterHelper.listBlock();
+                        listBlock();
                     }
                     else
                     {
@@ -82,7 +82,7 @@ namespace HtmlConverters
                     break;
                 case "li":
                 case "dt":
-                    var li = HtmlToMarkdownConverterHelper.getListMarkdownTag();
+                    var li = getListMarkdownTag();
                     nodeStack.Push(li);
                     break;
                 case "a":

@@ -226,44 +226,60 @@ namespace HtmlConverters.Tests
         //enable when wordwrap ie enabled
         //	var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
         //	html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
-        //	[Fact] public void should be able to convert a block of html", function() {
-        //		var md = markdown(html);
+        //	[Fact] public void should be able to convert a block of html(){
+        //		var html =html);
         //		var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
         //		expect(md).toEqual(md_str);
         //	});
 
-        //[Fact] public void should be able to convert unordered list", function() {
-        //    var md = markdown("<ul><li>item a</li><li>item b</li></ul>");
+        //[Fact] public void should be able to convert unordered list(){
+        //    var html ="<ul><li>item a</li><li>item b</li></ul>");
         //    expect(md).toMatch(/\* item a\n\* item b\n/);
         //});
 
-        //        [Fact] public void should be able to convert ordered list", function() {
-        //            var md = markdown("<ol><li>item 1</li><li>item 2</li></ol>");
-        //            expect(md).toMatch(/1\. item 1\n1\. item 2\n/);
-        //        });
+        [Fact]
+        public void Should_convert_ol()
+        {
+            var html = "<ol><li>item 1</li><li>item 2</li></ol>";
+            var expected = "1. item 1\n1. item 2\n";
 
-        //        [Fact] public void should be able to convert nested lists", function() {
-        //            var md = markdown("<ul><li>item a<ul><li>item aa</li><li>item bb</li></ul></li><li>item b</li></ul>");
-        //            expect(md).toMatch(/\* item a\n  \* item aa\n  \* item bb\n\* item b\n/);
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+        [Fact]
+        public void Should_convert_ul_nested()
+        {
+            var html = "<ul><li>item a<ul><li>item aa</li><li>item bb</li></ul></li><li>item b</li></ul>";
+            var expected = "* item a\n  * item aa\n  * item bb\n* item b\n";
 
-        //        [Fact] public void should not convert empty list items", function() {
-        //            var md = markdown("<ol><li>item 1</li><li/></ol>");
-        //            expect(md).toMatch(/1\. item 1\n/);
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //            md = markdown("<ul><li>item 1</li><li></li></ol>");
-        //            expect(md).toMatch(/\* item 1\n/);
-        //        });
+        [Fact]
+        public void Should_not_convert_empty_list_ol()
+        {
+            var html = "<ol><li>item 1</li><li/></ol>";
+            var expected = "1. item 1\n";
 
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert images inline style", function() {
-        //            var md = markdown("<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>", {"inlineStyle": true});
+        [Fact]
+        public void Should_not_convert_empty_list_ul()
+        {
+            var html = "<ul><li>item 1</li><li></li></ul>";
+            var expected = "* item 1\n";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+        //        [Fact] public void should be able to convert images inline style(){
+        //            var html ="<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>", {"inlineStyle": true});
         //            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert images reference style", function() {
-        //            var md = markdown("<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>");
+        //        [Fact] public void should be able to convert images reference style(){
+        //            var html ="<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>");
         //            var expected = "![Example Image][0]\n\n[0]: /img/62838.jpg";
         //            expect(md).toEqual(expected);
 
@@ -274,22 +290,22 @@ namespace HtmlConverters.Tests
 
         //        });
 
-        //        [Fact] public void should be able to convert images as block elements", function() {
-        //            var md = markdown("before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after");
+        //        [Fact] public void should be able to convert images as block elements(){
+        //            var html ="before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after");
         //            var expected = "before\n\n![Example Image][0]\n\nafter\n\n[0]: /img/62838.jpg";
         //            expect(md).toEqual(expected);
 
-        //            var md = markdown("before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after", {"inlineStyle": true});
+        //            var html ="before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after", {"inlineStyle": true});
         //            var expected = "before\n\n![Example Image](/img/62838.jpg \"Free example image\")\n\nafter";
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should not convert images if url is empty", function() {
-        //            var md = markdown("<img alt=\"Example Image\" title=\"Free example image\">");
+        //        [Fact] public void should not convert images if url is empty(){
+        //            var html ="<img alt=\"Example Image\" title=\"Free example image\">");
         //            expect(md).toEqual("");
         //        });
 
-        //        [Fact] public void should be able to properly convert links reference style", function() {
+        //        [Fact] public void should be able to properly convert links reference style(){
         //            var html = "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
         //            html += "text1";
         //            html += "<a href=\"http://www.example1.com\" title=\"Example\">Visit Example1</a>";
@@ -302,16 +318,16 @@ namespace HtmlConverters.Tests
         //            expected += "[0]: http://www.example.com\n";
         //            expected += "[1]: http://www.example1.com";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert links inline style", function() {
-        //            var md = markdown("<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>", {"inlineStyle": true});
+        //        [Fact] public void should be able to convert links inline style(){
+        //            var html ="<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>", {"inlineStyle": true});
         //            expect(md).toEqual("[Visit Example](http://www.example.com \"Example\")");
         //        });
 
-        //        [Fact] public void should not convert if link has no text to display", function() {
+        //        [Fact] public void should not convert if link has no text to display(){
         //            var html = "<a href="/"/>";
         //            md = markdown(html);
         //            expect(md).toEqual("");
@@ -324,7 +340,7 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual("");
         //        });
 
-        //        [Fact] public void should convert elements with child elements surrounded by whitespace", function() {
+        //        [Fact] public void should convert elements with child elements surrounded by whitespace(){
         //            var html = "<div>\n\t<h2>\n\t\t<a href="http://finance.yahoo.com">Yahoo! Finance</a>\n\t</h2>\n</div>";
         //            md = markdown(html);
         //            expect(md).toEqual("## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com");
@@ -335,14 +351,14 @@ namespace HtmlConverters.Tests
         //        });
 
 
-        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing", function() {
-        //            var md = markdown("<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>", {"inlineStyle": true});
+        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing(){
+        //            var html ="<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>", {"inlineStyle": true});
         //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - reference style parsing", function() {
-        //            var md = markdown("<a href="/exec/j/4/?pid=62838&lno=1&afsrc=1"><img alt="Example Image" title="Free example image" src="/img/62838.jpg"></a>", {"inlineStyle": false});
+        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - reference style parsing(){
+        //            var html ="<a href="/exec/j/4/?pid=62838&lno=1&afsrc=1"><img alt="Example Image" title="Free example image" src="/img/62838.jpg"></a>", {"inlineStyle": false});
         //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
 
         //            var html = "<a href="/exec/j/4/?pid=62838&lno=1&afsrc=1">\n\t<img alt="Example Image" title="Free example image" src="/img/62838.jpg">\n\t</a>";
@@ -351,29 +367,29 @@ namespace HtmlConverters.Tests
 
         //        });
 
-        //        [Fact] public void should output only text of empty links", function() {
-        //            var md = markdown("<a href="">Empty Link Text</a>", {"inlineStyle": true});
+        //        [Fact] public void should output only text of empty links(){
+        //            var html ="<a href="">Empty Link Text</a>", {"inlineStyle": true});
         //            var expected = "Empty Link Text";
         //            expect(md).toEqual(expected);
         //        });
 
         //        //tags that have no parsing rules e.g. form elements "head", "style", script", "link" "option", "noscript", "noframes", "input", "button", "select", "textarea", and "label"
-        //        [Fact] public void should not convert any elements that have no parsing rules. ", function() {
+        //        [Fact] public void should not convert any elements that have no parsing rules. (){
         //            var html = "<head><link rel="openid.delegate" href="http://jeresig.livejournal.com/"/>";
         //            html +=	"<script src="http://ejohn.org/files/retweet.js"></script></head>";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            expect(md).toEqual("");
         //        });
 
         //        //tables
-        //        [Fact] public void should be able to convert tables", function() {
+        //        [Fact] public void should be able to convert tables(){
         //            var html = "<table border=\"1\">";
         //            html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
         //            html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
         //            html += "</table>";
 
-        //            var md = markdown(html);
+        //            var html =html);
 
         //            var expected = "Row 1 Cell 1\n\n";
         //            expected += "Row 1 Cell 2\n\n";
@@ -383,21 +399,21 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert tables with lists", function() {
+        //        [Fact] public void should be able to convert tables with lists(){
         //            var html = "<table border=\"1\">";
         //            html += "<tr><td width=\"50%\"><ul><li>List Item 1</li><li>List Item 2</li></ul></td>";
         //            html += "<td><ul><li>List Item 3</li><li>List Item 4</li></ul></td></tr>";
         //            html += "</table>";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            var expected = "* List Item 1\n* List Item 2\n\n* List Item 3\n* List Item 4\n\n";
 
         //            expect(md).toEqual(expected);
         //        });
 
         //        //test empty block element
-        //        [Fact] public void should not convert emptyt tags", function() {
-        //            var md = markdown("<div>        </div>");
+        //        [Fact] public void should not convert emptyt tags(){
+        //            var html ="<div>        </div>");
         //            expect(md).toEqual("");
 
         //            md = markdown("<h1>        </h1>");
@@ -407,8 +423,8 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual("");
         //        });
 
-        //        [Fact] public void should collape whitespace to single space for text nodes", function() {
-        //            var md = markdown("<div>     a     b     c\n     d    </div>");
+        //        [Fact] public void should collape whitespace to single space for text nodes(){
+        //            var html ="<div>     a     b     c\n     d    </div>");
         //            expect(md).toEqual(" a b c d \n\n");
 
         //            md = markdown("<div></div><div>     a     b     c\n     d    </div>");
@@ -421,8 +437,8 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual("# a b c d \n\n");
         //        });
 
-        //        [Fact] public void should trim anchor title and text", function() {
-        //            var md = markdown("<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>", {"inlineStyle": true});
+        //        [Fact] public void should trim anchor title and text(){
+        //            var html ="<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>", {"inlineStyle": true});
         //            expect(md).toEqual("[Visit Example](http://www.example.com \"Example\")");
 
         //            md = markdown("<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>", {"inlineStyle": false});
@@ -436,10 +452,10 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual("[32 comments][0]\n\n[0]: /blog/line-length-readability#comments");
         //        });
 
-        //        [Fact] public void should trim image alt and title", function() {
+        //        [Fact] public void should trim image alt and title(){
         //            var html = "<img alt=\"  Example Image   \" title=\"   Free example image   \" src=\"/img/62838.jpg\">";
 
-        //            var md = markdown(html, {"inlineStyle": true});
+        //            var html =html, {"inlineStyle": true});
         //            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
         //            expect(md).toEqual(expected);
 
@@ -448,13 +464,13 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert image followed by link to markdown that can be renderd using showdown", function() {
+        //        [Fact] public void should be able to convert image followed by link to markdown that can be renderd using showdown(){
         //            var html = "<p>\n";
         //            html += "	<img alt="Feed" class="icon" src="http://mementodb.com/images/logo.png"/>\n";
         //            html += "	<a href="http://mementodb.com">Memento</a>\n";
         //            html += "</p>";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            var expected = "![Feed][0]\n\n[Memento][1]\n\n";
         //            expected += "[0]: http://mementodb.com/images/logo.png\n";
         //            expected += "[1]: http://mementodb.com";
@@ -462,37 +478,37 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert list items with linked images as only linked images", function() {
+        //        [Fact] public void should be able to convert list items with linked images as only linked images(){
         //            var html = "before list";
         //                html += "<ul>\n";
         //                html += "	<li><div class="curve-down"><a href="/ipad/#video"><img src="http://images.apple.com/home/images/promo_video_ipad_launch.png" alt="Watch the new iPad video" width="237" height="155" /><span class="play"></span></a></div></li>";
         //                html += "	<li><div class="curve-down"><a href="/iphone/videos/#tv-ads-datenight"><img src="http://images.apple.com/home/images/promo_video_iphone4s_ad.png" alt="Watch the new iPhone TV Ad" width="237" height="155" /><span class="play"></span></a></div></li>";
         //                html += "</ul>\n";
-        //            var md = markdown(html);
+        //            var html =html);
         //            var expected = "before list\n\n";
         //            expected += "[![Watch the new iPad video](http://images.apple.com/home/images/promo_video_ipad_launch.png)](/ipad/#video)\n\n";
         //            expected += "[![Watch the new iPhone TV Ad](http://images.apple.com/home/images/promo_video_iphone4s_ad.png)](/iphone/videos/#tv-ads-datenight)\n\n";
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert title", function() {
+        //        [Fact] public void should be able to convert title(){
         //            var html = "<hgroup>\n";
         //            html += "\t<h1><a href="http://www.google.com">Nathen Harvey</a></h1>\n";
         //            html += "\t<h2>a blog</h2>\n";
         //            html += "</hgroup>";
-        //            var md = markdown(html);
+        //            var html =html);
 
         //            var expected = "# [Nathen Harvey][0]\n\n## a blog\n\n\n\n[0]: http://www.google.com";
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert paragrphs in blocquotes", function() {
+        //        [Fact] public void should be able to convert paragrphs in blocquotes(){
         //            var html="<blockquote>\n";
         //            html+="\t<p>Lorem ipsum</p>\n";
         //            html+="\t<p>Lorem ipsum</p>\n";
         //            html+="</blockquote>";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            var expected = "> Lorem ipsum\n\n> Lorem ipsum\n\n";
         //            expect(md).toEqual(expected);
 
@@ -507,7 +523,7 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert pre block", function() {
+        //        [Fact] public void should be able to convert pre block(){
         //            var html = "<pre>";
         //            html += "	void main(String[] args) {\n";
         //            html += "		System.out.println(\"Hello Markdown\");\n";
@@ -519,11 +535,11 @@ namespace HtmlConverters.Tests
         //            expected += "    " + "	}";
         //            expected += "\n\n";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert pre block with html tags", function() {
+        //        [Fact] public void should be able to convert pre block with html tags(){
         //            var html = "<pre>\n";
         //            html += "<div a=\"b\">\n";
         //            html += "	<span>this is span inside pre block</span>\n";
@@ -537,17 +553,17 @@ namespace HtmlConverters.Tests
         //            expected += "    " + "\n";
         //            expected += "\n";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert <pre><code>...</code></pre> blocks", function() {
+        //        [Fact] public void should be able to convert <pre><code>...</code></pre> blocks(){
         //            var html= "<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}";
         //            html+= "\nQuote string";
         //            html+= "\n{% endblockquote %}";
         //            html+= "\n</code></pre>";
 
-        //            var md = markdown(html);
+        //            var html =html);
         //            expected="    {% blockquote [author[, source]] [link] [source_link_title] %}";
         //            expected+="\n    Quote string";
         //            expected+="\n    {% endblockquote %}";
@@ -559,8 +575,8 @@ namespace HtmlConverters.Tests
         //    });
         //}
 
-        //describe("markdownDOMParser", function() {
-        //    [Fact] public void parser function should be able to echo input html", function() {
+        //describe("markdownDOMParser(){
+        //    [Fact] public void parser function should be able to echo input html(){
         //        var html = "<div><span id=\"test-id\"> Hmm <br/> Hello markdown converter </span><!-- this is comment --></div>";
         //        var result ="";
 

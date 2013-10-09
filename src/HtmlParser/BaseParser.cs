@@ -13,7 +13,7 @@ namespace HtmlParser
     public abstract class BaseParser
     {
         int _index;
-        readonly HtmlStack stack = new HtmlStack();
+        public readonly Stack<string> stack = new Stack<string>();
         private string last;
         private readonly List<string> _htmlBlocks = new List<string>();
         private bool isChars;
@@ -30,7 +30,7 @@ namespace HtmlParser
                 isChars = true;
 
                 // Make sure we're not in a script or style element
-                if (false == string.IsNullOrWhiteSpace(stack.last()) || false == special.Contains(stack.last()))
+                if ((false == string.IsNullOrWhiteSpace(stack.SafePeek()) || false == special.Contains(stack.SafePeek())))
                 {
 
                     // Comment
@@ -118,13 +118,13 @@ namespace HtmlParser
         {
             if (HtmlTags.Block.Contains(tagName))
             {
-                while (false == string.IsNullOrWhiteSpace(stack.last()) && HtmlTags.Inline.Contains(stack.last()))
+                while (false == string.IsNullOrWhiteSpace(stack.SafePeek()) && HtmlTags.Inline.Contains(stack.SafePeek()))
                 {
-                    parseEndTag("", stack.last());
+                    parseEndTag("", stack.Peek());
                 }
             }
 
-            if (HtmlTags.SelfClosing.Contains(tagName) && stack.last() == tagName)
+            if (HtmlTags.SelfClosing.Contains(tagName) && stack.SafePeek() == tagName)
             {
                 parseEndTag("", tagName);
             }
@@ -135,7 +135,7 @@ namespace HtmlParser
 
             if (!unary)
             {
-                stack.push(tagName);
+                stack.Push(tagName);
             }
 
             var attrs = new Dictionary<string, HtmlAttribute>();
@@ -181,36 +181,24 @@ namespace HtmlParser
 
         public void parseEndTag(string tag, string tagName)
         {
-            int pos;
             if (string.IsNullOrWhiteSpace(tagName))
             {
                 // If no tag name is provided, clean shop
-                pos = 0;
+                while (stack.Count > 0)
+                {
+                    end(stack.Pop());
+                }
             }
             else
             {
                 // Find the closest opened tag of the same type
-                for (pos = stack.Length - 1; pos >= 0; pos--)
+                while (stack.Peek() != tagName)
                 {
-                    if (stack[pos] == tagName)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (pos >= 0)
-            {
-                // Close all the open elements, up the stack
-                for (var i = stack.Length - 1; i >= pos; i--)
-                {
-                    end(stack[i]);
+                    end(stack.Pop());
                 }
 
-                // Remove the open elements from the stack
-                stack.Length = pos;
+                end(stack.Pop());
             }
-
         }
 
         protected abstract void comment(string text);

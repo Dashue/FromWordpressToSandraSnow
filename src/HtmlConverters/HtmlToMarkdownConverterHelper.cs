@@ -7,12 +7,6 @@ namespace HtmlConverters
 {
     public static class HtmlToMarkdownConverterHelper
     {
-        public static string trim(string value)
-        {
-            throw new NotImplementedException();
-            //return value.replace(/^\s+|\s+$/g,"");
-        }
-
         public static bool endsWith(string value, string suffix)
         {
             var match = Regex.Match(value, suffix + "$");
@@ -29,20 +23,6 @@ namespace HtmlConverters
         {
             throw new NotImplementedException();
             //return value.indexOf(str) == 0;
-        }
-
-        public static string getListMarkdownTag()
-        {
-            throw new NotImplementedException();
-            //var listItem = "";
-
-            //if (listTagStack) {
-            //    for (var i = 0; i < listTagStack.length - 1; i++) {
-            //        listItem += "  ";
-            //    }
-            //}
-            //listItem += peek(listTagStack);
-            //return listItem;
         }
 
         public static Dictionary<string, HtmlAttribute> convertAttrs(Dictionary<string, HtmlAttribute> attrs)
@@ -75,20 +55,6 @@ namespace HtmlConverters
                 }
             }
             return "";
-        }
-
-        public static void listBlock()
-        {
-            throw new NotImplementedException();
-            //if (nodeList.length > 0) {
-            //    var li = peek(nodeList);
-
-            //    if (!endsWith(li, "\n")) {
-            //        nodeList.push("\n");
-            //    }
-            //} else {
-            //    nodeList.push("\n");
-            //}
         }
     }
 }

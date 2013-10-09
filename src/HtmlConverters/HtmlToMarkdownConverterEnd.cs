@@ -99,27 +99,29 @@ namespace HtmlConverters
                 case "ul":
                 case "ol":
                 case "dl":
-                    throw new NotImplementedException();
-                    //        listBlock();
-                    //        listTagStack.pop();
+                    listBlock();
+                    listTagStack.Pop();
                     break;
                 case "li":
                 case "dt":
-                    throw new NotImplementedException();
-                    //        var li = getListMarkdownTag();
-                    //        if (!removeIfEmptyTag(li)) {
-                    //            var text = trim(sliceText(li));
+                    var li = getListMarkdownTag();
+                    if (!removeIfEmptyTag(li))
+                    {
+                        var text = sliceText(li).Trim();
 
-                    //            if (startsWith(text, "[![")) {
-                    //                nodeList.pop();
-                    //                block();
-                    //                nodeList.push(text);
-                    //                block(true);
-                    //            } else {
-                    //                nodeList.push(text);
-                    //                listBlock();
-                    //            }
-                    //        }
+                        if (text.StartsWith("[!["))
+                        {
+                            nodeStack.Pop();
+                            block(false);
+                            nodeStack.Push(text);
+                            block(true);
+                        }
+                        else
+                        {
+                            nodeStack.Push(text);
+                            listBlock();
+                        }
+                    }
                     break;
                 case "blockquote":
                     blockquoteStack.Pop();

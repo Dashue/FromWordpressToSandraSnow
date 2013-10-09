@@ -21,7 +21,7 @@ namespace HtmlConverters
         Stack<string> blockquoteStack = new Stack<string>();
         Stack<bool> preStack = new Stack<bool>();
         Stack<string> codeStack = new Stack<string>();
-        Stack<string> nodeStack = new Stack<string>();
+        internal Stack<string> nodeStack = new Stack<string>();
         List<string> links = new List<string>();
 
 
@@ -105,6 +105,40 @@ namespace HtmlConverters
                     nodeStack.Push("\n\n");
                 }
             }
+        }
+
+        public void listBlock()
+        {
+            if (nodeStack.Count > 0)
+            {
+                var li = nodeStack.Peek();
+
+                if (false == li.EndsWith("\n"))
+                {
+                    nodeStack.Push("\n");
+                }
+            }
+            else
+            {
+                nodeStack.Push("\n");
+            }
+        }
+
+        public string getListMarkdownTag()
+        {
+            var listItem = "";
+
+            for (var i = 0; i < listTagStack.Count - 1; i++)
+            {
+                listItem += "  ";
+            }
+
+            if (listTagStack.Count > 0)
+            {
+                listItem += listTagStack.Peek();
+            }
+
+            return listItem;
         }
 
         public string Convert(string html)
