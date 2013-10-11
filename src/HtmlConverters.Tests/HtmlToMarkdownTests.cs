@@ -7,10 +7,12 @@ namespace HtmlConverters.Tests
     public class HtmlToMarkdownTests
     {
         private HtmlToMarkdownConverter _converter;
+        private HtmlToMarkdownConverter _inlineConverter;
 
         public HtmlToMarkdownTests()
         {
             _converter = new HtmlToMarkdownConverter();
+            _inlineConverter = new HtmlToMarkdownConverter(true);
         }
 
         [Fact]
@@ -272,55 +274,70 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
-        //        [Fact] public void should be able to convert images inline style(){
-        //            var html ="<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>", {"inlineStyle": true});
-        //            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
-        //            expect(md).toEqual(expected);
-        //        });
+        [Fact]
+        public void Should_convert_image_inline()
+        {
+            var html = "<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>";
+            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert images reference style(){
-        //            var html ="<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>");
-        //            var expected = "![Example Image][0]\n\n[0]: /img/62838.jpg";
-        //            expect(md).toEqual(expected);
+        [Fact]
+        public void Should_convert_image()
+        {
+            var html = "<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>";
+            var expected = "![Example Image][0]\n\n[0]: /img/62838.jpg";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //            //if alt is empty then title should be used
-        //            md = markdown("<img title=\"Free example image title\" src=\"/img/62838.jpg\">");
-        //            var expected = "![Free example image title][0]\n\n[0]: /img/62838.jpg";
-        //            expect(md).toEqual(expected);
+        [Fact]
+        public void Should_convert_image_if_alt_is_empty_use_title()
+        {
+            var html = "<img title=\"Free example image title\" src=\"/img/62838.jpg\">";
+            var expected = "![Free example image title][0]\n\n[0]: /img/62838.jpg";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        });
+        [Fact]
+        public void Should_convert_image_in_text()
+        {
+            var html = "before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after";
+            var expected = "before\n\n![Example Image][0]\n\nafter\n\n[0]: /img/62838.jpg";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert images as block elements(){
-        //            var html ="before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after");
-        //            var expected = "before\n\n![Example Image][0]\n\nafter\n\n[0]: /img/62838.jpg";
-        //            expect(md).toEqual(expected);
+        [Fact]
+        public void Should_convert_image_in_text_inline()
+        {
+            var html = "before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after";
+            var expected = "before\n\n![Example Image](/img/62838.jpg \"Free example image\")\n\nafter";
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+        }
+        [Fact]
+        public void Should_not_convert_image_if_url_is_empty()
+        {
+            var html = "<img alt=\"Example Image\" title=\"Free example image\">";
+            var expected = string.Empty;
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+        }
 
-        //            var html ="before<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"/>after", {"inlineStyle": true});
-        //            var expected = "before\n\n![Example Image](/img/62838.jpg \"Free example image\")\n\nafter";
-        //            expect(md).toEqual(expected);
-        //        });
+        [Fact]
+        public void Should_convert_links()
+        {
+            var html = "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
+            html += "text1";
+            html += "<a href=\"http://www.example1.com\" title=\"Example\">Visit Example1</a>";
+            html += "text2";
+            html += "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
 
-        //        [Fact] public void should not convert images if url is empty(){
-        //            var html ="<img alt=\"Example Image\" title=\"Free example image\">");
-        //            expect(md).toEqual("");
-        //        });
+            //urls should not be duplicated in reference style
+            var expected = "[Visit Example][0]text1[Visit Example1][1]text2[Visit Example][0]";
+            expected += "\n\n";
+            expected += "[0]: http://www.example.com\n";
+            expected += "[1]: http://www.example1.com";
 
-        //        [Fact] public void should be able to properly convert links reference style(){
-        //            var html = "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
-        //            html += "text1";
-        //            html += "<a href=\"http://www.example1.com\" title=\"Example\">Visit Example1</a>";
-        //            html += "text2";
-        //            html += "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
-
-        //            //urls should not be duplicated in reference style
-        //            var expected = "[Visit Example][0]text1[Visit Example1][1]text2[Visit Example][0]";
-        //            expected += "\n\n";
-        //            expected += "[0]: http://www.example.com\n";
-        //            expected += "[1]: http://www.example1.com";
-
-        //            var html =html);
-        //            expect(md).toEqual(expected);
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
         //        [Fact] public void should be able to convert links inline style(){
         //            var html ="<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>", {"inlineStyle": true});
@@ -466,28 +483,28 @@ namespace HtmlConverters.Tests
 
         //        [Fact] public void should be able to convert image followed by link to markdown that can be renderd using showdown(){
         //            var html = "<p>\n";
-        //            html += "	<img alt="Feed" class="icon" src="http://mementodb.com/images/logo.png"/>\n";
+        //            html += "	<img alt="Feed" class="icon" src="http://mementodb.com/image/logo.png"/>\n";
         //            html += "	<a href="http://mementodb.com">Memento</a>\n";
         //            html += "</p>";
 
         //            var html =html);
         //            var expected = "![Feed][0]\n\n[Memento][1]\n\n";
-        //            expected += "[0]: http://mementodb.com/images/logo.png\n";
+        //            expected += "[0]: http://mementodb.com/image/logo.png\n";
         //            expected += "[1]: http://mementodb.com";
 
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert list items with linked images as only linked images(){
+        //        [Fact] public void should be able to convert list items with linked image as only linked image(){
         //            var html = "before list";
         //                html += "<ul>\n";
-        //                html += "	<li><div class="curve-down"><a href="/ipad/#video"><img src="http://images.apple.com/home/images/promo_video_ipad_launch.png" alt="Watch the new iPad video" width="237" height="155" /><span class="play"></span></a></div></li>";
-        //                html += "	<li><div class="curve-down"><a href="/iphone/videos/#tv-ads-datenight"><img src="http://images.apple.com/home/images/promo_video_iphone4s_ad.png" alt="Watch the new iPhone TV Ad" width="237" height="155" /><span class="play"></span></a></div></li>";
+        //                html += "	<li><div class="curve-down"><a href="/ipad/#video"><img src="http://image.apple.com/home/image/promo_video_ipad_launch.png" alt="Watch the new iPad video" width="237" height="155" /><span class="play"></span></a></div></li>";
+        //                html += "	<li><div class="curve-down"><a href="/iphone/videos/#tv-ads-datenight"><img src="http://image.apple.com/home/image/promo_video_iphone4s_ad.png" alt="Watch the new iPhone TV Ad" width="237" height="155" /><span class="play"></span></a></div></li>";
         //                html += "</ul>\n";
         //            var html =html);
         //            var expected = "before list\n\n";
-        //            expected += "[![Watch the new iPad video](http://images.apple.com/home/images/promo_video_ipad_launch.png)](/ipad/#video)\n\n";
-        //            expected += "[![Watch the new iPhone TV Ad](http://images.apple.com/home/images/promo_video_iphone4s_ad.png)](/iphone/videos/#tv-ads-datenight)\n\n";
+        //            expected += "[![Watch the new iPad video](http://image.apple.com/home/image/promo_video_ipad_launch.png)](/ipad/#video)\n\n";
+        //            expected += "[![Watch the new iPhone TV Ad](http://image.apple.com/home/image/promo_video_iphone4s_ad.png)](/iphone/videos/#tv-ads-datenight)\n\n";
         //            expect(md).toEqual(expected);
         //        });
 

@@ -21,13 +21,13 @@ namespace HtmlConverters
 
         public static bool startsWith(string value, string str)
         {
-            throw new NotImplementedException();
-            //return value.indexOf(str) == 0;
+            return value.IndexOf(str) == 0;
         }
 
         public static Dictionary<string, HtmlAttribute> convertAttrs(Dictionary<string, HtmlAttribute> attrs)
         {
-            throw new NotImplementedException();
+            return attrs;
+
             //var attributes = {};
             //for (var k in attrs) {
             //    var attr = attrs[k];

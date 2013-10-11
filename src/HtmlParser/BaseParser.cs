@@ -140,40 +140,46 @@ namespace HtmlParser
 
             var attrs = new Dictionary<string, HtmlAttribute>();
 
-            var match = RegularExpressions.Attribute.Match(rest);
-            if (match.Success)
+            var matches = RegularExpressions.Attribute.Matches(rest);
+
+            for (int i = 0; i < matches.Count; i++)
             {
-                var attributeName = match.Groups[1].Value;
-                string value;
+                var match = matches[i];
 
-                if (false == string.IsNullOrWhiteSpace(match.Groups[2].Value))
+                if (match.Success)
                 {
-                    value = match.Groups[2].Value;
-                }
-                else if (false == string.IsNullOrWhiteSpace(match.Groups[3].Value))
-                {
-                    value = match.Groups[3].Value;
-                }
-                else if (false == string.IsNullOrWhiteSpace(match.Groups[4].Value))
-                {
-                    value = match.Groups[4].Value;
-                }
-                else if (HtmlTags.FillAttrs.Contains(tagName))
-                {
-                    value = tagName;
-                }
-                else
-                {
-                    value = string.Empty;
-                }
+                    var attributeName = match.Groups[1].Value;
+                    string value;
 
-                var htmlAttribute = new HtmlAttribute
+                    if (false == string.IsNullOrWhiteSpace(match.Groups[2].Value))
+                    {
+                        value = match.Groups[2].Value;
+                    }
+                    else if (false == string.IsNullOrWhiteSpace(match.Groups[3].Value))
+                    {
+                        value = match.Groups[3].Value;
+                    }
+                    else if (false == string.IsNullOrWhiteSpace(match.Groups[4].Value))
+                    {
+                        value = match.Groups[4].Value;
+                    }
+                    else if (HtmlTags.FillAttrs.Contains(tagName))
+                    {
+                        value = tagName;
+                    }
+                    else
+                    {
+                        value = string.Empty;
+                    }
+
+                    var htmlAttribute = new HtmlAttribute
                     {
                         Name = attributeName,
                         Value = value,
                     };
 
-                attrs.Add(attributeName, htmlAttribute);
+                    attrs.Add(attributeName, htmlAttribute);
+                }
             }
 
             start(tagName, attrs, unary);

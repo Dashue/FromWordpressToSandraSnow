@@ -2,6 +2,7 @@
 
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace HtmlConverters
 {
@@ -51,50 +52,57 @@ namespace HtmlConverters
                     }
                     break;
                 case "a":
-                    throw new NotImplementedException();
-                    //        var text = sliceText("[");
-                    //        text = text.replace(/\s+/g, " ");
-                    //        text = trim(text);
+                    var text = sliceText("[");
+                    text = Regex.Replace(text, @"\s+/g", " ");
+                    text = text.Trim();
 
-                    //        if (text == "") {
-                    //            nodeList.pop();
-                    //            break;
-                    //        }
+                    if (text == "")
+                    {
+                        nodeStack.Pop();
+                        break;
+                    }
 
-                    //        var attrs = linkAttrStack.pop();
-                    //        var url;
-                    //        attrs["href"] &&  attrs["href"].value != "" ? url = attrs["href"].value : url = "";
+                    var attrs = linkAttrStack.Pop();
+                    var url = attrs.ContainsKey("href") && attrs["href"].Value != "" ? attrs["href"].Value : "";
 
-                    //        if (url == "") {
-                    //            nodeList.pop();
-                    //            nodeList.push(text);
-                    //            break;
-                    //        }
+                    if (url == "")
+                    {
+                        nodeStack.Pop();
+                        nodeStack.Push(text);
+                        break;
+                    }
 
-                    //        nodeList.push(text);
+                    nodeStack.Push(text);
 
-                    //        if (!inlineStyle && !startsWith(peek(nodeList), "!")){
-                    //            var l = links.indexOf(url);
-                    //            if (l == -1) {
-                    //                links.push(url);
-                    //                l=links.length-1;
-                    //            }
-                    //            nodeList.push("][" + l + "]");
-                    //        } else {
-                    //            if(startsWith(peek(nodeList), "!")){
-                    //                var text = nodeList.pop();
-                    //                text = nodeList.pop() + text;
-                    //                block();
-                    //                nodeList.push(text);
-                    //            }
+                    if (!inlineStyle && !HtmlToMarkdownConverterHelper.startsWith(nodeStack.Peek(), "!"))
+                    {
+                        var l = links.IndexOf(url);
+                        if (l == -1)
+                        {
+                            links.Add(url);
+                            l = links.Count - 1;
+                        }
+                        nodeStack.Push("][" + l + "]");
+                    }
+                    else
+                    {
+                        if (HtmlToMarkdownConverterHelper.startsWith(nodeStack.Peek(), "!"))
+                        {
+                            var localText = nodeStack.Pop();
+                            localText = nodeStack.Pop() + localText;
+                            block(false);
+                            nodeStack.Push(localText);
+                        }
 
-                    //            var title = attrs["title"];
-                    //            nodeList.push("](" + url + (title ? " \"" + trim(title.value).replace(/\s+/g, " ") + "\"" : "") + ")");
+                        var title = attrs["title"];
+                        var trimmedTitle = title.Value.Trim();
+                        nodeStack.Push("](" + url + (false == string.IsNullOrWhiteSpace(title.Value) ? " \"" + Regex.Replace(trimmedTitle, @"\s+/g", " ") + "\"" : "") + ")");
 
-                    //            if(startsWith(peek(nodeList), "!")){
-                    //                block(true);
-                    //            }
-                    //        }
+                        if (HtmlToMarkdownConverterHelper.startsWith(nodeStack.Peek(), "!"))
+                        {
+                            block(true);
+                        }
+                    }
                     break;
                 case "ul":
                 case "ol":
@@ -107,18 +115,18 @@ namespace HtmlConverters
                     var li = getListMarkdownTag();
                     if (!removeIfEmptyTag(li))
                     {
-                        var text = sliceText(li).Trim();
+                        var liContent = sliceText(li).Trim();
 
-                        if (text.StartsWith("[!["))
+                        if (liContent.StartsWith("[!["))
                         {
                             nodeStack.Pop();
                             block(false);
-                            nodeStack.Push(text);
+                            nodeStack.Push(liContent);
                             block(true);
                         }
                         else
                         {
-                            nodeStack.Push(text);
+                            nodeStack.Push(liContent);
                             listBlock();
                         }
                     }
