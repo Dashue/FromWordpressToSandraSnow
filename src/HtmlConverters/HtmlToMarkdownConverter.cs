@@ -9,7 +9,6 @@ using HtmlParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HtmlConverters
@@ -163,7 +162,6 @@ namespace HtmlConverters
                 }
             }
 
-            var stringBulder = new StringBuilder();
             Console.WriteLine(nodeStack.Count);
             var array = nodeStack.ToArray();
 
