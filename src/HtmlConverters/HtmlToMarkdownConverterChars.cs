@@ -22,7 +22,7 @@ namespace HtmlConverters
 
                 if (Regex.IsMatch(prevText, @"\s+$"))
                 {
-                    text = Regex.Replace(text, @"^\s+/g", "");
+                    text = text.TrimStart();
                 }
             }
             else

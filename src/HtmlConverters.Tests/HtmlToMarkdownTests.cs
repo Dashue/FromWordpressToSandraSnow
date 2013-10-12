@@ -198,41 +198,41 @@ namespace HtmlConverters.Tests
         }
 
 
-        //[Fact]
-        //public void Should_convert_span()
-        //{
-        //    var html = "<span>this is span element</span>";
-        //    var expected = " this is span element ";
+        [Fact]
+        public void Should_convert_span()
+        {
+            var html = "<span>this is span element</span>";
+            var expected = " this is span element ";
 
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //[Fact]
-        //public void Should_convert_span_inside_text_without_spaces()
-        //{
-        //    var html = "before<span>this is span element</span>after";
-        //    var expected = "before this is span element after";
+        [Fact]
+        public void Should_convert_span_inside_text_without_spaces()
+        {
+            var html = "before<span>this is span element</span>after";
+            var expected = "before this is span element after";
 
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //[Fact]
-        //public void Should_convert_span_inside_text_with_spaces()
-        //{
-        //    var html = "before <span>this is span element</span> after";
-        //    var expected = "before this is span element after";
+        [Fact]
+        public void Should_convert_span_inside_text_with_spaces()
+        {
+            var html = "before <span>this is span element</span> after";
+            var expected = "before this is span element after";
 
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
         //enable when wordwrap ie enabled
-        //	var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
-        //	html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
-        //	[Fact] public void should be able to convert a block of html(){
-        //		var html =html);
-        //		var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
-        //		expect(md).toEqual(md_str);
-        //	});
+        //    var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
+        //    html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
+        //    [Fact] public void should be able to convert a block of html(){
+        //        var html =html);
+        //        var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
+        //        expect(md).toEqual(md_str);
+        //    });
 
         //[Fact] public void should be able to convert unordered list(){
         //    var html ="<ul><li>item a</li><li>item b</li></ul>");
@@ -369,18 +369,18 @@ namespace HtmlConverters.Tests
         }
 
 
-        //[Fact]
-        //public void Should_convert_elements_with_child_elements_surrounded_by_whitespace()
-        //{
-        //    var html = "<div>\n\t<h2>\n\t\t<a href=\"http://finance.yahoo.com\">Yahoo! Finance</a>\n\t</h2>\n</div>";
-        //    var expected = "## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com";
-        //    Assert.Equal(expected, _converter.Convert(html));
+        [Fact]
+        public void Should_convert_elements_with_child_elements_surrounded_by_whitespace()
+        {
+            var html = "<div>\n\t<h2>\n\t\t<a href=\"http://finance.yahoo.com\">Yahoo! Finance</a>\n\t</h2>\n</div>";
+            var expected = "## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com";
+            Assert.Equal(expected, _converter.Convert(html));
 
 
-        //    html = "<span>\n\t<b>Hello</b>\n\t</span>";
-        //    expected = " **Hello** ";
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+            html = "<span>\n\t<b>Hello</b>\n\t</span>";
+            expected = " **Hello** ";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
 
         //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing(){

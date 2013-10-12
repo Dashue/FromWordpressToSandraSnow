@@ -166,9 +166,17 @@ namespace HtmlConverters
             var array = nodeStack.ToArray();
 
             Array.Reverse(array);
-
+            ClearStacks();
             return string.Join("", array);
 
+        }
+
+        private void ClearStacks()
+        {
+            nodeStack.Clear();
+            listTagStack.Clear();
+            linkAttrStack.Clear();
+            links.Clear();
         }
 
         protected override void comment(string text)

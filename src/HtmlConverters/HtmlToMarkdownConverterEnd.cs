@@ -179,17 +179,21 @@ namespace HtmlConverters
                     break;
                 case "code":
                 case "span":
-                    throw new NotImplementedException();
-                    //        if (preStack.length > 0) {
-                    //            break;
-                    //        } else if (trim(peek(nodeList)) == "") {
-                    //            nodeList.pop();
-                    //            nodeList.push(markdownTags[tag]);
-                    //        } else {
-                    //            var text = nodeList.pop();
-                    //            nodeList.push(trim(text));
-                    //            nodeList.push(markdownTags[tag]);
-                    //        }
+                    if (preStack.Count > 0)
+                    {
+                        break;
+                    }
+                    else if (string.IsNullOrWhiteSpace(nodeStack.Peek()))
+                    {
+                        nodeStack.Pop();
+                        nodeStack.Push(Markdown.Tags[tag]);
+                    }
+                    else
+                    {
+                        var item = nodeStack.Pop();
+                        nodeStack.Push(item.Trim());
+                        nodeStack.Push(Markdown.Tags[tag]);
+                    }
                     break;
                 //case "table":
                 //    nodeList.push("</table>");

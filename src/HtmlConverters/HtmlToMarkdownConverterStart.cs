@@ -1,7 +1,6 @@
 ﻿using HtmlParser;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace HtmlConverters
 {
@@ -61,7 +60,7 @@ namespace HtmlConverters
                     {
                         break;
                     }
-                    else if (Regex.IsMatch(nodeStack.Peek(), @"!\s+$"))
+                    else if (false == nodeStack.SafePeek().EndsWith(" "))
                     {
                         nodeStack.Push(Markdown.Tags[tag]);
                     }
