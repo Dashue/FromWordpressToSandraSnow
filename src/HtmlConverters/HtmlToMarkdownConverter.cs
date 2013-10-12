@@ -152,7 +152,7 @@ namespace HtmlConverters
                     if (i == 0)
                     {
                         var lastItem = nodeStack.Pop();
-                        nodeStack.Push(Regex.Replace(lastItem, @"\s+$/g", ""));
+                        nodeStack.Push(lastItem.TrimEnd());
                         nodeStack.Push("\n\n[" + i + "]: " + links[i]);
                     }
                     else
@@ -166,6 +166,7 @@ namespace HtmlConverters
             var array = nodeStack.ToArray();
 
             Array.Reverse(array);
+
             return string.Join("", array);
 
         }

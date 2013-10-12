@@ -339,33 +339,48 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
-        //        [Fact] public void should be able to convert links inline style(){
-        //            var html ="<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>", {"inlineStyle": true});
-        //            expect(md).toEqual("[Visit Example](http://www.example.com \"Example\")");
-        //        });
+        [Fact]
+        public void Should_convert_links_inline()
+        {
+            var html = "<a href=\"http://www.example.com\" title=\"Example\">Visit Example</a>";
+            var expected = "[Visit Example](http://www.example.com \"Example\")";
 
-        //        [Fact] public void should not convert if link has no text to display(){
-        //            var html = "<a href="/"/>";
-        //            md = markdown(html);
-        //            expect(md).toEqual("");
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+        }
 
-        //            html = "<div class="logo">\n";
-        //            html += "	<a href="/"/>\n";
-        //            html += "</div>";
+        [Fact]
+        public void Should_not_convert_links_if_no_text_to_display()
+        {
+            var html = "<a href=\"/\"/>";
+            var expected = "";
 
-        //            md = markdown(html);
-        //            expect(md).toEqual("");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should convert elements with child elements surrounded by whitespace(){
-        //            var html = "<div>\n\t<h2>\n\t\t<a href="http://finance.yahoo.com">Yahoo! Finance</a>\n\t</h2>\n</div>";
-        //            md = markdown(html);
-        //            expect(md).toEqual("## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com");
+        [Fact]
+        public void Should_not_convert_links_if_no_text_to_display_in_block()
+        {
+            var html = "<div class=\"logo\">\n";
+            html += "	<a href=\"/\"/>\n";
+            html += "</div>";
+            var expected = "";
 
-        //            html = "<span>\n\t<b>Hello</b>\n\t</span>";
-        //            md = markdown(html);
-        //            expect(md).toEqual(" **Hello** ");
-        //        });
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+
+        //[Fact]
+        //public void Should_convert_elements_with_child_elements_surrounded_by_whitespace()
+        //{
+        //    var html = "<div>\n\t<h2>\n\t\t<a href=\"http://finance.yahoo.com\">Yahoo! Finance</a>\n\t</h2>\n</div>";
+        //    var expected = "## [Yahoo! Finance][0]\n\n[0]: http://finance.yahoo.com";
+        //    Assert.Equal(expected, _converter.Convert(html));
+
+
+        //    html = "<span>\n\t<b>Hello</b>\n\t</span>";
+        //    expected = " **Hello** ";
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
 
         //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing(){
