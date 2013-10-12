@@ -151,21 +151,21 @@ namespace HtmlConverters
                     preStack.Push(true);
                     nodeStack.Push("    ");
                     break;
-                case "table":
-                    nodeStack.Push("<table>");
-                    break;
-                case "thead":
-                    nodeStack.Push("<thead>");
-                    break;
-                case "tbody":
-                    nodeStack.Push("<tbody>");
-                    break;
-                case "tr":
-                    nodeStack.Push("<tr>");
-                    break;
-                case "td":
-                    nodeStack.Push("<td>");
-                    break;
+                //case "table":
+                //    nodeStack.Push("<table>");
+                //    break;
+                //case "thead":
+                //    nodeStack.Push("<thead>");
+                //    break;
+                //case "tbody":
+                //    nodeStack.Push("<tbody>");
+                //    break;
+                //case "tr":
+                //    nodeStack.Push("<tr>");
+                //    break;
+                //case "td":
+                //    nodeStack.Push("<td>");
+                //    break;
             }
         }
     }

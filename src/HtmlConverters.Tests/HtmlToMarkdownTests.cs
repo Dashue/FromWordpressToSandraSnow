@@ -234,10 +234,14 @@ namespace HtmlConverters.Tests
         //        expect(md).toEqual(md_str);
         //    });
 
-        //[Fact] public void should be able to convert unordered list(){
-        //    var html ="<ul><li>item a</li><li>item b</li></ul>");
-        //    expect(md).toMatch(/\* item a\n\* item b\n/);
-        //});
+        [Fact]
+        public void Should_convert_ul()
+        {
+            var html = "<ul><li>item a</li><li>item b</li></ul>";
+            var expected = "* item a\n* item b\n";
+
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
         [Fact]
         public void Should_convert_ol()
@@ -399,61 +403,76 @@ namespace HtmlConverters.Tests
 
         //        });
 
-        //        [Fact] public void should output only text of empty links(){
-        //            var html ="<a href="">Empty Link Text</a>", {"inlineStyle": true});
-        //            var expected = "Empty Link Text";
-        //            expect(md).toEqual(expected);
-        //        });
+        [Fact]
+        public void Should_output_only_text_of_empty_links_inline()
+        {
+            var html = "<a href=\"\">Empty Link Text</a>";
+            var expected = "Empty Link Text";
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+        }
 
-        //        //tags that have no parsing rules e.g. form elements "head", "style", script", "link" "option", "noscript", "noframes", "input", "button", "select", "textarea", and "label"
-        //        [Fact] public void should not convert any elements that have no parsing rules. (){
-        //            var html = "<head><link rel="openid.delegate" href="http://jeresig.livejournal.com/"/>";
-        //            html +=	"<script src="http://ejohn.org/files/retweet.js"></script></head>";
+        [Fact]
+        public void Should_not_convert_any_elements_that_have_no_parsing_rules()
+        {
+            //tags that have no parsing rules e.g. form elements "head", "style", script", "link" "option", "noscript", "noframes", "input", "button", "select", "textarea", and "label"
+            var html = "<head><link rel=\"openid.delegate\" href=\"http://jeresig.livejournal.com/\"/>";
+            html += "<script src=\"http://ejohn.org/files/retweet.js\"></script></head>";
 
-        //            var html =html);
-        //            expect(md).toEqual("");
-        //        });
+            Assert.Equal(string.Empty, _converter.Convert(html));
+        }
 
-        //        //tables
-        //        [Fact] public void should be able to convert tables(){
-        //            var html = "<table border=\"1\">";
-        //            html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
-        //            html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
-        //            html += "</table>";
+        //[Fact]
+        //public void should_be_able_to_convert_tables_to_table_syntax()
+        //{
+        //    var html = "<table border=\"1\">";
+        //    html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
+        //    html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
+        //    html += "</table>";
 
-        //            var html =html);
+        //    var expected = "Row 1 Cell 1\n\n";
+        //    expected += "Row 1 Cell 2\n\n";
+        //    expected += "Row 2 Cell 1\n\n";
+        //    expected += "Row 2 Cell 2\n\n";
 
-        //            var expected = "Row 1 Cell 1\n\n";
-        //            expected += "Row 1 Cell 2\n\n";
-        //            expected += "Row 2 Cell 1\n\n";
-        //            expected += "Row 2 Cell 2\n\n";
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
-        //            expect(md).toEqual(expected);
-        //        });
+        //[Fact]
+        //public void should_be_able_to_convert_tables_to_row_syntax()
+        //{
+        //    var html = "<table border=\"1\">";
+        //    html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
+        //    html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
+        //    html += "</table>";
 
-        //        [Fact] public void should be able to convert tables with lists(){
-        //            var html = "<table border=\"1\">";
-        //            html += "<tr><td width=\"50%\"><ul><li>List Item 1</li><li>List Item 2</li></ul></td>";
-        //            html += "<td><ul><li>List Item 3</li><li>List Item 4</li></ul></td></tr>";
-        //            html += "</table>";
+        //    var expected = "Row 1 Cell 1\n\n";
+        //    expected += "Row 1 Cell 2\n\n";
+        //    expected += "Row 2 Cell 1\n\n";
+        //    expected += "Row 2 Cell 2\n\n";
 
-        //            var html =html);
-        //            var expected = "* List Item 1\n* List Item 2\n\n* List Item 3\n* List Item 4\n\n";
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
-        //            expect(md).toEqual(expected);
-        //        });
+        [Fact]
+        public void Should_be_able_to_convert_tables_with_lists()
+        {
+            var html = "<table border=\"1\">";
+            html += "<tr><td width=\"50%\"><ul><li>List Item 1</li><li>List Item 2</li></ul></td>";
+            html += "<td><ul><li>List Item 3</li><li>List Item 4</li></ul></td></tr>";
+            html += "</table>";
 
-        //        //test empty block element
-        //        [Fact] public void should not convert emptyt tags(){
-        //            var html ="<div>        </div>");
-        //            expect(md).toEqual("");
+            var expected = "* List Item 1\n* List Item 2\n\n* List Item 3\n* List Item 4\n\n";
 
-        //            md = markdown("<h1>        </h1>");
-        //            expect(md).toEqual("");
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //            md = markdown("<b>        </b>");
-        //            expect(md).toEqual("");
-        //        });
+        [Fact]
+        public void Should_not_convert_emptyt_tags()
+        {
+            Assert.Equal(string.Empty, _converter.Convert("<div>        </div>"));
+            Assert.Equal(string.Empty, _converter.Convert("<h1>        </h1>"));
+            Assert.Equal(string.Empty, _converter.Convert("<b>        </b>"));
+        }
 
         //        [Fact] public void should collape whitespace to single space for text nodes(){
         //            var html ="<div>     a     b     c\n     d    </div>");
