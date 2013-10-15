@@ -225,14 +225,14 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
-        //enable when wordwrap ie enabled
+        //[Fact]
+        //public void Should_be_able_to_convert_a_block_of_html()
+        //{
         //    var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
         //    html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
-        //    [Fact] public void should be able to convert a block of html(){
-        //        var html =html);
-        //        var md_str = "This is a paragraph\. Followed by a blockquote\.\n\n\> \nThis is a blockquote which will be truncated at 75 characters width\. It \nwill be somewhere around here\.\n\nSome list for you:\n\n\* item a\n\* item b\n\nSo which one do you choose\?\n\n";
-        //        expect(md).toEqual(md_str);
-        //    });
+        //    var expected = "This is a paragraph. Followed by a blockquote.\n\n> \nThis is a blockquote which will be truncated at 75 characters width. It \nwill be somewhere around here.\n\nSome list for you:\n\n* item a\n* item b\n\nSo which one do you choose?\n\n";
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
         [Fact]
         public void Should_convert_ul()
@@ -387,21 +387,24 @@ namespace HtmlConverters.Tests
         }
 
 
-        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - inline style parsing(){
-        //            var html ="<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>", {"inlineStyle": true});
-        //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
-        //            expect(md).toEqual(expected);
-        //        });
+        //[Fact]
+        //public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown_inline()
+        //{
+        //    var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
+        //    var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
+        //    Assert.Equal(expected, _inlineConverter.Convert(html));
+        //}
 
-        //        [Fact] public void should convert image wrapped in anchor to markdown that can be rendered using showdown - reference style parsing(){
-        //            var html ="<a href="/exec/j/4/?pid=62838&lno=1&afsrc=1"><img alt="Example Image" title="Free example image" src="/img/62838.jpg"></a>", {"inlineStyle": false});
-        //            var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
+        //[Fact]
+        //public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown()
+        //{
+        //    var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
+        //    var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
 
-        //            var html = "<a href="/exec/j/4/?pid=62838&lno=1&afsrc=1">\n\t<img alt="Example Image" title="Free example image" src="/img/62838.jpg">\n\t</a>";
-        //            md = markdown(html, {"inlineStyle": false});
-        //            expect(md).toEqual(expected);
+        //    //var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\">\n\t<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\">\n\t</a>";
 
-        //        });
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
         [Fact]
         public void Should_output_only_text_of_empty_links_inline()
@@ -474,34 +477,32 @@ namespace HtmlConverters.Tests
             Assert.Equal(string.Empty, _converter.Convert("<b>        </b>"));
         }
 
-        //        [Fact] public void should collape whitespace to single space for text nodes(){
-        //            var html ="<div>     a     b     c\n     d    </div>");
-        //            expect(md).toEqual(" a b c d \n\n");
+        //[Fact]
+        //public void Should_collape_whitespace_to_single_space_for_text_nodes()
+        //{
+        //    Assert.Equal(" a b c d \n\n", "<div>     a     b     c\n     d    </div>");
 
-        //            md = markdown("<div></div><div>     a     b     c\n     d    </div>");
-        //            expect(md).toEqual(" a b c d \n\n");
+        //    Assert.Equal(" a b c d \n\n", "<div></div><div>     a     b     c\n     d    </div>");
 
-        //            md = markdown("<div>1</div><div>     a     b     c\n     d    </div>");
-        //            expect(md).toEqual("1\n\na b c d \n\n");
+        //    Assert.Equal("1\n\na b c d \n\n", "<div>1</div><div>     a     b     c\n     d    </div>");
 
-        //            md = markdown("<h1>     a     b     c\n     d </h1>");
-        //            expect(md).toEqual("# a b c d \n\n");
-        //        });
+        //    Assert.Equal("# a b c d \n\n", "<h1>     a     b     c\n     d </h1>");
+        //}
 
-        //        [Fact] public void should trim anchor title and text(){
-        //            var html ="<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>", {"inlineStyle": true});
-        //            expect(md).toEqual("[Visit Example](http://www.example.com \"Example\")");
+        //[Fact]
+        //public void should_trim_anchor_title_and_text()
+        //{
+        //    var html = "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>";
+        //    Assert.Equal("[Visit Example](http://www.example.com \"Example\")", _inlineConverter.Convert(html));
 
-        //            md = markdown("<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>", {"inlineStyle": false});
-        //            expect(md).toEqual("[Visit Example][0]\n\n[0]: http://www.example.com");
+        //    Assert.Equal("[Visit Example][0]\n\n[0]: http://www.example.com", "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>");
 
-        //            var html ="<a href="/blog/line-length-readability#comments">\n";
-        //            html += "<span itemprop="interactionCount">32</span>\n";
-        //            html += "comments\n</a>";
+        //    html = "<a href=\"/blog/line-length-readability#comments\">\n";
+        //    html += "<span itemprop=\"interactionCount\">32</span>\n";
+        //    html += "comments\n</a>";
 
-        //            md = markdown(html);
-        //            expect(md).toEqual("[32 comments][0]\n\n[0]: /blog/line-length-readability#comments");
-        //        });
+        //    Assert.Equal("[32 comments][0]\n\n[0]: /blog/line-length-readability#comments", _converter.Convert(html));
+        //}
 
         //        [Fact] public void should trim image alt and title(){
         //            var html = "<img alt=\"  Example Image   \" title=\"   Free example image   \" src=\"/img/62838.jpg\">";
@@ -542,53 +543,54 @@ namespace HtmlConverters.Tests
         //            expect(md).toEqual(expected);
         //        });
 
-        //        [Fact] public void should be able to convert title(){
-        //            var html = "<hgroup>\n";
-        //            html += "\t<h1><a href="http://www.google.com">Nathen Harvey</a></h1>\n";
-        //            html += "\t<h2>a blog</h2>\n";
-        //            html += "</hgroup>";
-        //            var html =html);
+        [Fact]
+        public void should_be_able_to_convert_title()
+        {
+            var html = "<hgroup>\n";
+            html += "\t<h1><a href=\"http://www.google.com\">Nathen Harvey</a></h1>\n";
+            html += "\t<h2>a blog</h2>\n";
+            html += "</hgroup>";
 
-        //            var expected = "# [Nathen Harvey][0]\n\n## a blog\n\n\n\n[0]: http://www.google.com";
-        //            expect(md).toEqual(expected);
-        //        });
+            var expected = "# [Nathen Harvey][0]\n\n## a blog\n\n\n\n[0]: http://www.google.com";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //        [Fact] public void should be able to convert paragrphs in blocquotes(){
-        //            var html="<blockquote>\n";
-        //            html+="\t<p>Lorem ipsum</p>\n";
-        //            html+="\t<p>Lorem ipsum</p>\n";
-        //            html+="</blockquote>";
+        [Fact]
+        public void should_be_able_to_convert_paragrphs_in_blocquotes()
+        {
+            var html = "<blockquote>\n";
+            html += "\t<p>Lorem ipsum</p>\n";
+            html += "\t<p>Lorem ipsum</p>\n";
+            html += "</blockquote>";
 
-        //            var html =html);
-        //            var expected = "> Lorem ipsum\n\n> Lorem ipsum\n\n";
-        //            expect(md).toEqual(expected);
+            var expected = "> Lorem ipsum\n\n> Lorem ipsum\n\n";
+            Assert.Equal(expected, _converter.Convert(html));
 
-        //            html = "<blockquote>\n";
-        //            html+="\t<p>Lorem ipsum</p>\n";
-        //            html+="</blockquote>\n";
-        //            html+="<blockquote>\n";
-        //            html+="\t<p>Lorem ipsum</p>\n";
-        //            html+="</blockquote>"
+            html = "<blockquote>\n";
+            html += "\t<p>Lorem ipsum</p>\n";
+            html += "</blockquote>\n";
+            html += "<blockquote>\n";
+            html += "\t<p>Lorem ipsum</p>\n";
+            html += "</blockquote>";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
 
-        //            md = markdown(html);
-        //            expect(md).toEqual(expected);
-        //        });
+        //[Fact]
+        //public void should_be_able_to_convert_pre_block()
+        //{
+        //    var html = "<pre>";
+        //    html += "	void main(String[] args) {\n";
+        //    html += "		System.out.println(\"Hello Markdown\");\n";
+        //    html += "	}";
+        //    html += "</pre>";
 
-        //        [Fact] public void should be able to convert pre block(){
-        //            var html = "<pre>";
-        //            html += "	void main(String[] args) {\n";
-        //            html += "		System.out.println(\"Hello Markdown\");\n";
-        //            html += "	}";
-        //            html += "</pre>";
+        //    var expected = "    " + "	void main(String[] args) {\n";
+        //    expected += "    " + "		System.out.println(\"Hello Markdown\");\n";
+        //    expected += "    " + "	}";
+        //    expected += "\n\n";
 
-        //            var expected = "    " + "	void main(String[] args) {\n";
-        //            expected += "    " + "		System.out.println(\"Hello Markdown\");\n";
-        //            expected += "    " + "	}";
-        //            expected += "\n\n";
-
-        //            var html =html);
-        //            expect(md).toEqual(expected);
-        //        });
+        //    Assert.Equal(expected, _converter.Convert(html));
+        //}
 
         //        [Fact] public void should be able to convert pre block with html tags(){
         //            var html = "<pre>\n";
@@ -625,35 +627,6 @@ namespace HtmlConverters.Tests
         //        });
         //    });
         //}
-
-        //describe("markdownDOMParser(){
-        //    [Fact] public void parser function should be able to echo input html(){
-        //        var html = "<div><span id=\"test-id\"> Hmm <br/> Hello markdown converter </span><!-- this is comment --></div>";
-        //        var result ="";
-
-        //        markdownHTMLParser(html, {
-        //            start: function(tag, attrs, unary) {
-        //                result+="<"+tag.toLowerCase();
-
-        //                for ( var i = 0; i < attrs.length; i++ ) {
-        //                    result += " " + attrs[i].name + "="" + attrs[i].value + """;
-        //                }
-
-        //                result += (unary ? "/" : "") + ">";
-        //            },
-        //            chars: function(text) {
-        //                result += text;
-        //            },
-        //            end: function(tag) {
-        //                result+="</"+tag.toLowerCase()+">";
-        //            },
-        //            comment: function(text) {
-        //                result += "<!--" + text + "-->";
-        //            }
-        //        });
-        //        expect(html).toEqual(result);
-        //    });
-        //});
 
         ////TODO add test for block function
         ////TODO test bookmarklet links
