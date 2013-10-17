@@ -18,7 +18,7 @@ namespace HtmlConverters
         Stack<string> listTagStack = new Stack<string>();
         private Stack<Dictionary<string, HtmlAttribute>> linkAttrStack = new Stack<Dictionary<string, HtmlAttribute>>();
         Stack<string> blockquoteStack = new Stack<string>();
-        Stack<bool> preStack = new Stack<bool>();
+        internal Stack<bool> preStack = new Stack<bool>();
         Stack<string> codeStack = new Stack<string>();
         internal Stack<string> nodeStack = new Stack<string>();
         List<string> links = new List<string>();
@@ -179,12 +179,7 @@ namespace HtmlConverters
             links.Clear();
         }
 
-        protected override void comment(string text)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void completed(List<string> htmlStack)
+        public override void comment(string text)
         {
             throw new NotImplementedException();
         }

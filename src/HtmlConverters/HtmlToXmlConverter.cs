@@ -14,22 +14,17 @@ namespace HtmlConverters
                 "style"
             };
 
-        protected override void comment(string text)
+        public override void comment(string text)
         {
             Results.AppendFormat("<!--{0}-->", text);
         }
 
-        protected override void chars(string text)
+        public override void chars(string text)
         {
             Results.Append(text);
         }
 
-        protected override void completed(List<string> htmlStack)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void start(string tag, Dictionary<string, HtmlAttribute> attributes, bool unary)
+        public override void start(string tag, Dictionary<string, HtmlAttribute> attributes, bool unary)
         {
             Results.AppendFormat("<{0}", tag);
 
@@ -41,7 +36,7 @@ namespace HtmlConverters
             Results.Append(unary ? "/>" : ">");
         }
 
-        protected override void end(string tag)
+        public override void end(string tag)
         {
             Results.AppendFormat("</{0}>", tag);
 
@@ -54,7 +49,7 @@ namespace HtmlConverters
 
         public string Convert(string html)
         {
-            base.Parse(html);
+            Parse(html);
 
             return Results.ToString();
         }

@@ -225,14 +225,16 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
-        //[Fact]
-        //public void Should_be_able_to_convert_a_block_of_html()
-        //{
-        //    var html = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>";
-        //    html += "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
-        //    var expected = "This is a paragraph. Followed by a blockquote.\n\n> \nThis is a blockquote which will be truncated at 75 characters width. It \nwill be somewhere around here.\n\nSome list for you:\n\n* item a\n* item b\n\nSo which one do you choose?\n\n";
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+        [Fact]
+        public void Should_be_able_to_convert_a_block_of_html()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<p>This is a paragraph. Followed by a blockquote.</p><blockquote><p>This is a blockquote which will be truncated at 75 characters width. It will be somewhere around here.</p></blockquote>" + "<p>Some list for you:</p><ul><li>item a</li><li>item b</li></ul><p>So which one do you choose?</p>";
+
+                runner.Expected = "This is a paragraph. Followed by a blockquote.\n\n> \nThis is a blockquote which will be truncated at 75 characters width. It \nwill be somewhere around here.\n\nSome list for you:\n\n* item a\n* item b\n\nSo which one do you choose?\n\n";
+            }
+        }
 
         [Fact]
         public void Should_convert_ul()
@@ -386,32 +388,36 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
+        [Fact]
+        public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown_inline()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
+                runner.Expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
+            }
+        }
 
-        //[Fact]
-        //public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown_inline()
-        //{
-        //    var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
-        //    var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
-        //    Assert.Equal(expected, _inlineConverter.Convert(html));
-        //}
+        [Fact]
+        public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
+                runner.Expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
 
-        //[Fact]
-        //public void should_convert_image_wrapped_in_anchor_to_markdown_that_can_be_rendered_using_showdown()
-        //{
-        //    var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\"><img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\"></a>";
-        //    var expected = "[![Example Image](/img/62838.jpg \"Free example image\")](/exec/j/4/?pid=62838&lno=1&afsrc=1)";
-
-        //    //var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\">\n\t<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\">\n\t</a>";
-
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+                //var html = "<a href=\"/exec/j/4/?pid=62838&lno=1&afsrc=1\">\n\t<img alt=\"Example Image\" title=\"Free example image\" src=\"/img/62838.jpg\">\n\t</a>";
+            }
+        }
 
         [Fact]
         public void Should_output_only_text_of_empty_links_inline()
         {
-            var html = "<a href=\"\">Empty Link Text</a>";
-            var expected = "Empty Link Text";
-            Assert.Equal(expected, _inlineConverter.Convert(html));
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<a href=\"\">Empty Link Text</a>";
+                runner.Expected = "Empty Link Text";
+            }
         }
 
         [Fact]
@@ -424,124 +430,167 @@ namespace HtmlConverters.Tests
             Assert.Equal(string.Empty, _converter.Convert(html));
         }
 
-        //[Fact]
-        //public void should_be_able_to_convert_tables_to_table_syntax()
-        //{
-        //    var html = "<table border=\"1\">";
-        //    html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
-        //    html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
-        //    html += "</table>";
+        [Fact]
+        public void should_be_able_to_convert_tables_to_table_syntax()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<table border=\"1\">";
+                runner.Input += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
+                runner.Input += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
+                runner.Input += "</table>";
 
-        //    var expected = "Row 1 Cell 1\n\n";
-        //    expected += "Row 1 Cell 2\n\n";
-        //    expected += "Row 2 Cell 1\n\n";
-        //    expected += "Row 2 Cell 2\n\n";
+                runner.Expected = "Row 1 Cell 1\n\n";
+                runner.Expected += "Row 1 Cell 2\n\n";
+                runner.Expected += "Row 2 Cell 1\n\n";
+                runner.Expected += "Row 2 Cell 2\n\n";
+            }
+        }
 
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+        [Fact]
+        public void should_be_able_to_convert_tables_to_row_syntax()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<table border=\"1\">";
+                runner.Input += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
+                runner.Input += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
+                runner.Input += "</table>";
 
-        //[Fact]
-        //public void should_be_able_to_convert_tables_to_row_syntax()
-        //{
-        //    var html = "<table border=\"1\">";
-        //    html += "<tr><td>Row 1 Cell 1</td><td>Row 1 Cell 2</td></tr>";
-        //    html += "<tr><td>Row 2 Cell 1</td><td>Row 2 Cell 2</td></tr>";
-        //    html += "</table>";
-
-        //    var expected = "Row 1 Cell 1\n\n";
-        //    expected += "Row 1 Cell 2\n\n";
-        //    expected += "Row 2 Cell 1\n\n";
-        //    expected += "Row 2 Cell 2\n\n";
-
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+                runner.Expected = "Row 1 Cell 1\n\n";
+                runner.Expected += "Row 1 Cell 2\n\n";
+                runner.Expected += "Row 2 Cell 1\n\n";
+                runner.Expected += "Row 2 Cell 2\n\n";
+            }
+        }
 
         [Fact]
         public void Should_be_able_to_convert_tables_with_lists()
         {
-            var html = "<table border=\"1\">";
-            html += "<tr><td width=\"50%\"><ul><li>List Item 1</li><li>List Item 2</li></ul></td>";
-            html += "<td><ul><li>List Item 3</li><li>List Item 4</li></ul></td></tr>";
-            html += "</table>";
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<table border=\"1\">";
+                runner.Input += "<tr><td width=\"50%\"><ul><li>List Item 1</li><li>List Item 2</li></ul></td>";
+                runner.Input += "<td><ul><li>List Item 3</li><li>List Item 4</li></ul></td></tr>";
+                runner.Input += "</table>";
 
-            var expected = "* List Item 1\n* List Item 2\n\n* List Item 3\n* List Item 4\n\n";
+                runner.Expected = "* List Item 1\n* List Item 2\n\n* List Item 3\n* List Item 4\n\n";
+            }
+        }
+
+        [Fact]
+        public void Should_not_convert_empty_div()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<div>        </div>";
+                runner.Expected = string.Empty;
+            }
+        }
+        [Fact]
+        public void Should_not_convert_empty_h1()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<h1>        </h1>";
+                runner.Expected = string.Empty;
+            }
+        }
+        [Fact]
+        public void Should_not_convert_empty_b()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<b>        </b>";
+                runner.Expected = string.Empty;
+            }
+        }
+
+        [Fact]
+        public void Should_collape_whitespace_to_single_space_for_text_nodes()
+        {
+            Assert.Equal(" a b c d \n\n", "<div>     a     b     c\n     d    </div>");
+
+            Assert.Equal(" a b c d \n\n", "<div></div><div>     a     b     c\n     d    </div>");
+
+            Assert.Equal("1\n\na b c d \n\n", "<div>1</div><div>     a     b     c\n     d    </div>");
+
+            Assert.Equal("# a b c d \n\n", "<h1>     a     b     c\n     d </h1>");
+        }
+
+        [Fact]
+        public void should_trim_anchor_title_and_text_inline()
+        {
+            using (var runner = new HtmlToMarkdownInlineRunner())
+            {
+                runner.Input = "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>";
+                runner.Expected = "[Visit Example](http://www.example.com \"Example\")";
+            }
+        }
+        [Fact]
+        public void should_trim_anchor_title_and_text()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>";
+                runner.Expected = "[Visit Example][0]\n\n[0]: http://www.example.com";
+            }
+        }
+
+        [Fact]
+        public void should_trim_anchor_title_and_text_relative_path()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<a href=\"/blog/line-length-readability#comments\">\n" +
+                               "<span itemprop=\"interactionCount\">32</span>\n" + "comments\n</a>";
+                runner.Expected = "[32 comments][0]\n\n[0]: /blog/line-length-readability#comments";
+            }
+        }
+
+        [Fact]
+        public void should_trim_image_alt_and_title()
+        {
+            var html = "<img alt=\"  Example Image   \" title=\"   Free example image   \" src=\"/img/62838.jpg\">";
+
+            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
+            Assert.Equal(expected, _inlineConverter.Convert(html));
+
+            expected = "![Example Image][0]\n\n[0]: /img/62838.jpg";
+            Assert.Equal(expected, _converter.Convert(html));
+        }
+
+        [Fact]
+        public void should_be_able_to_convert_image_followed_by_link_to_markdown_that_can_be_renderd_using_showdown()
+        {
+            var html = "<p>\n";
+            html += "	<img alt=\"Feed\" class=\"icon\" src=\"http://mementodb.com/image/logo.png\"/>\n";
+            html += "	<a href=\"http://mementodb.com\">Memento</a>\n";
+            html += "</p>";
+
+            var expected = "![Feed][0]\n\n[Memento][1]\n\n";
+            expected += "[0]: http://mementodb.com/image/logo.png\n";
+            expected += "[1]: http://mementodb.com";
 
             Assert.Equal(expected, _converter.Convert(html));
         }
 
         [Fact]
-        public void Should_not_convert_emptyt_tags()
+        public void should_be_able_to_convert_list_items_with_linked_image_as_only_linked_image()
         {
-            Assert.Equal(string.Empty, _converter.Convert("<div>        </div>"));
-            Assert.Equal(string.Empty, _converter.Convert("<h1>        </h1>"));
-            Assert.Equal(string.Empty, _converter.Convert("<b>        </b>"));
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "before list";
+                runner.Input += "<ul>\n";
+                runner.Input += "	<li><div class=\"curve-down\"><a href=\"/ipad/#video\"><img src=\"http://image.apple.com/home/image/promo_video_ipad_launch.png\" alt=\"Watch the new iPad video\" width=\"237\" height=\"155\" /><span class=\"play\"></span></a></div></li>";
+                runner.Input += "	<li><div class=\"curve-down\"><a href=\"/iphone/videos/#tv-ads-datenight\"><img src=\"http://image.apple.com/home/image/promo_video_iphone4s_ad.png\" alt=\"Watch the new iPhone TV Ad\" width=\"237\" height=\"155\" /><span class=\"play\"></span></a></div></li>";
+                runner.Input += "</ul>\n";
+
+                runner.Expected = "before list\n\n";
+                runner.Expected += "[![Watch the new iPad video](http://image.apple.com/home/image/promo_video_ipad_launch.png)](/ipad/#video)\n\n";
+                runner.Expected += "[![Watch the new iPhone TV Ad](http://image.apple.com/home/image/promo_video_iphone4s_ad.png)](/iphone/videos/#tv-ads-datenight)\n\n";
+            }
         }
-
-        //[Fact]
-        //public void Should_collape_whitespace_to_single_space_for_text_nodes()
-        //{
-        //    Assert.Equal(" a b c d \n\n", "<div>     a     b     c\n     d    </div>");
-
-        //    Assert.Equal(" a b c d \n\n", "<div></div><div>     a     b     c\n     d    </div>");
-
-        //    Assert.Equal("1\n\na b c d \n\n", "<div>1</div><div>     a     b     c\n     d    </div>");
-
-        //    Assert.Equal("# a b c d \n\n", "<h1>     a     b     c\n     d </h1>");
-        //}
-
-        //[Fact]
-        //public void should_trim_anchor_title_and_text()
-        //{
-        //    var html = "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>";
-        //    Assert.Equal("[Visit Example](http://www.example.com \"Example\")", _inlineConverter.Convert(html));
-
-        //    Assert.Equal("[Visit Example][0]\n\n[0]: http://www.example.com", "<a href=\"http://www.example.com\" title=\"   Example   \">   Visit Example    </a>");
-
-        //    html = "<a href=\"/blog/line-length-readability#comments\">\n";
-        //    html += "<span itemprop=\"interactionCount\">32</span>\n";
-        //    html += "comments\n</a>";
-
-        //    Assert.Equal("[32 comments][0]\n\n[0]: /blog/line-length-readability#comments", _converter.Convert(html));
-        //}
-
-        //        [Fact] public void should trim image alt and title(){
-        //            var html = "<img alt=\"  Example Image   \" title=\"   Free example image   \" src=\"/img/62838.jpg\">";
-
-        //            var html =html, {"inlineStyle": true});
-        //            var expected = "![Example Image](/img/62838.jpg \"Free example image\")\n\n";
-        //            expect(md).toEqual(expected);
-
-        //            md = markdown(html);
-        //            expected = "![Example Image][0]\n\n[0]: /img/62838.jpg";
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        [Fact] public void should be able to convert image followed by link to markdown that can be renderd using showdown(){
-        //            var html = "<p>\n";
-        //            html += "	<img alt="Feed" class="icon" src="http://mementodb.com/image/logo.png"/>\n";
-        //            html += "	<a href="http://mementodb.com">Memento</a>\n";
-        //            html += "</p>";
-
-        //            var html =html);
-        //            var expected = "![Feed][0]\n\n[Memento][1]\n\n";
-        //            expected += "[0]: http://mementodb.com/image/logo.png\n";
-        //            expected += "[1]: http://mementodb.com";
-
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        [Fact] public void should be able to convert list items with linked image as only linked image(){
-        //            var html = "before list";
-        //                html += "<ul>\n";
-        //                html += "	<li><div class="curve-down"><a href="/ipad/#video"><img src="http://image.apple.com/home/image/promo_video_ipad_launch.png" alt="Watch the new iPad video" width="237" height="155" /><span class="play"></span></a></div></li>";
-        //                html += "	<li><div class="curve-down"><a href="/iphone/videos/#tv-ads-datenight"><img src="http://image.apple.com/home/image/promo_video_iphone4s_ad.png" alt="Watch the new iPhone TV Ad" width="237" height="155" /><span class="play"></span></a></div></li>";
-        //                html += "</ul>\n";
-        //            var html =html);
-        //            var expected = "before list\n\n";
-        //            expected += "[![Watch the new iPad video](http://image.apple.com/home/image/promo_video_ipad_launch.png)](/ipad/#video)\n\n";
-        //            expected += "[![Watch the new iPhone TV Ad](http://image.apple.com/home/image/promo_video_iphone4s_ad.png)](/iphone/videos/#tv-ads-datenight)\n\n";
-        //            expect(md).toEqual(expected);
-        //        });
 
         [Fact]
         public void should_be_able_to_convert_title()
@@ -575,65 +624,60 @@ namespace HtmlConverters.Tests
             Assert.Equal(expected, _converter.Convert(html));
         }
 
-        //[Fact]
-        //public void should_be_able_to_convert_pre_block()
-        //{
-        //    var html = "<pre>";
-        //    html += "	void main(String[] args) {\n";
-        //    html += "		System.out.println(\"Hello Markdown\");\n";
-        //    html += "	}";
-        //    html += "</pre>";
+        [Fact]
+        public void should_be_able_to_convert_pre_block()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<pre>";
+                runner.Input += "	void main(String[] args) {\n";
+                runner.Input += "		System.out.println(\"Hello Markdown\");\n";
+                runner.Input += "	}";
+                runner.Input += "</pre>";
 
-        //    var expected = "    " + "	void main(String[] args) {\n";
-        //    expected += "    " + "		System.out.println(\"Hello Markdown\");\n";
-        //    expected += "    " + "	}";
-        //    expected += "\n\n";
+                runner.Expected = "    " + "	void main(String[] args) {\n";
+                runner.Expected += "    " + "		System.out.println(\"Hello Markdown\");\n";
+                runner.Expected += "    " + "	}";
+                runner.Expected += "\n\n";
+            }
+        }
 
-        //    Assert.Equal(expected, _converter.Convert(html));
-        //}
+        [Fact]
+        public void should_be_able_to_convert_pre_block_with_html_tags()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<pre>\n";
+                runner.Input += "<div a=\"b\">\n";
+                runner.Input += "	<span>this is span inside pre block</span>\n";
+                runner.Input += "	this is paragraph inside pre block\n";
+                runner.Input += "</div>";
+                runner.Input += "</pre>";
 
-        //        [Fact] public void should be able to convert pre block with html tags(){
-        //            var html = "<pre>\n";
-        //            html += "<div a=\"b\">\n";
-        //            html += "	<span>this is span inside pre block</span>\n";
-        //            html += "	this is paragraph inside pre block\n";
-        //            html += "</div>";
-        //            html += "</pre>";
+                runner.Expected = "    " + "\n\n\n";
+                runner.Expected += "    " + "	this is span inside pre block\n";
+                runner.Expected += "    " + "	this is paragraph inside pre block\n";
+                runner.Expected += "    " + "\n";
+                runner.Expected += "\n";
+            }
+        }
 
-        //            var expected = "    " + "\n\n\n";
-        //            expected += "    " + "	this is span inside pre block\n";
-        //            expected += "    " + "	this is paragraph inside pre block\n";
-        //            expected += "    " + "\n";
-        //            expected += "\n";
+        [Fact]
+        public void should_be_able_to_convert_code_inside_pre_blocks()
+        {
+            using (var runner = new HtmlToMarkdownRunner())
+            {
+                runner.Input = "<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}" +
+                               "\nQuote string"
+                               + "\n{% endblockquote %}"
+                               + "\n</code></pre>";
 
-        //            var html =html);
-        //            expect(md).toEqual(expected);
-        //        });
-
-        //        [Fact] public void should be able to convert <pre><code>...</code></pre> blocks(){
-        //            var html= "<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}";
-        //            html+= "\nQuote string";
-        //            html+= "\n{% endblockquote %}";
-        //            html+= "\n</code></pre>";
-
-        //            var html =html);
-        //            expected="    {% blockquote [author[, source]] [link] [source_link_title] %}";
-        //            expected+="\n    Quote string";
-        //            expected+="\n    {% endblockquote %}";
-        //            expected+="\n    ";
-        //            expected+="\n\n";
-
-        //            expect(md).toEqual(expected);
-        //        });
-        //    });
-        //}
-
-        ////TODO add test for block function
-        ////TODO test bookmarklet links
-        ////TODO add test for xss protection
-        ////TODO test parsing of iframe/frame element
-        ////TODO add tests to verify hidden nodes are not parsed
-        ////TODO add more unit tests based on official markdown syntax
-        ////TODO improve formatting of pre/code tags
+                runner.Expected = "    {% blockquote [author[, source]] [link] [source_link_title] %}"
+                                  + "\n    Quote string"
+                                  + "\n    {% endblockquote %}"
+                                  + "\n    "
+                                  + "\n\n";
+            }
+        }
     }
 }

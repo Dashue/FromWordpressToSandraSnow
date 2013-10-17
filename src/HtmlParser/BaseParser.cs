@@ -207,15 +207,10 @@ namespace HtmlParser
             }
         }
 
-        protected abstract void comment(string text);
-
-        protected abstract void chars(string text);
-
-        protected abstract void completed(List<string> htmlStack);
-
-        protected abstract void start(string tag, Dictionary<string, HtmlAttribute> attributes, bool unary);
-
-        protected abstract void end(string tag);
+        public abstract void comment(string text);
+        public abstract void chars(string text);
+        public abstract void start(string tag, Dictionary<string, HtmlAttribute> attributes, bool unary);
+        public abstract void end(string tag);
 
         // Special Elements (can contain anything)
         protected abstract List<string> ExcludedTags { get; }

@@ -1,14 +1,10 @@
-﻿
-
-
-using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace HtmlConverters
 {
     public partial class HtmlToMarkdownConverter
     {
-        protected override void end(string tag)
+        public override void end(string tag)
         {
             tag = tag.ToLower();
 
@@ -53,7 +49,7 @@ namespace HtmlConverters
                     break;
                 case "a":
                     var text = sliceText("[");
-                    text = Regex.Replace(text, @"\s+/g", " ");
+                    text = Regex.Replace(text, @"\s+", " ");
                     text = text.Trim();
 
                     if (text == "")
@@ -96,7 +92,7 @@ namespace HtmlConverters
 
                         var title = attrs["title"];
                         var trimmedTitle = title.Value.Trim();
-                        nodeStack.Push("](" + url + (false == string.IsNullOrWhiteSpace(title.Value) ? " \"" + Regex.Replace(trimmedTitle, @"\s+/g", " ") + "\"" : "") + ")");
+                        nodeStack.Push("](" + url + (false == string.IsNullOrWhiteSpace(title.Value) ? " \"" + Regex.Replace(trimmedTitle, @"\s+", " ") + "\"" : "") + ")");
 
                         if (HtmlToMarkdownConverterHelper.startsWith(nodeStack.Peek(), "!"))
                         {
@@ -135,7 +131,6 @@ namespace HtmlConverters
                     blockquoteStack.Pop();
                     break;
                 case "pre":
-                    throw new NotImplementedException();
                     //        //uncomment following experimental code to discard line numbers when syntax highlighters are used
                     //        //notes this code thorough testing before production user
                     //        /*

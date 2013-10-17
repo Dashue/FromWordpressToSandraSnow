@@ -6,7 +6,7 @@ namespace HtmlConverters
 {
     public partial class HtmlToMarkdownConverter
     {
-        protected override void start(string tag, Dictionary<string, HtmlAttribute> attrs, bool unary)
+        public override void start(string tag, Dictionary<string, HtmlAttribute> attrs, bool unary)
         {
             tag = tag.ToLower();
 
