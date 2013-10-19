@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlParser">
+      <HintPath>..\packages\HtmlToMarkdown.Net.1.0.0.0\lib\net45\HtmlParser.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlToMarkdown.Net">
+      <HintPath>..\packages\HtmlToMarkdown.Net.1.0.0.0\lib\net45\HtmlToMarkdown.Net.dll</HintPath>
+    </Reference>
     <Reference Include="ReactiveUI">
       <HintPath>..\packages\reactiveui-core.5.2.0\lib\Portable-Net45+WinRT45+WP8\ReactiveUI.dll</HintPath>
     </Reference>
@@ -125,14 +131,6 @@
     <ProjectReference Include="..\BlogExportParsers\BlogExportParsers.csproj">
       <Project>{0D3EEF6D-4A1D-4734-A9D1-79DBE9573A1A}</Project>
       <Name>BlogExportParsers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HtmlConverters\HtmlConverters.csproj">
-      <Project>{7B9D57CD-DF01-4B6F-A923-42521F03E1EB}</Project>
-      <Name>HtmlConverters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HtmlParser\HtmlParser.csproj">
-      <Project>{C9EBA8ED-4DB8-4DF7-9FB9-C8ED1C822A3E}</Project>
-      <Name>HtmlParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

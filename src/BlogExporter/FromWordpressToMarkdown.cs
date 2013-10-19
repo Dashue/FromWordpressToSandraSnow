@@ -1,29 +1,29 @@
 ﻿using BlogExportParsers;
-using HtmlConverters;
+using HtmlToMarkdown.Net;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace BlogExporter
 {
     public class FromWordpressToMarkdown
     {
-        private WordpressExportParser _exportParser;
-        private HtmlToMarkdownConverter _htmlToMarkdownConverter;
+        private readonly WordpressExportParser _exportParser;
+        private readonly HtmlToMarkdownConverter _htmlToMarkdownConverter;
 
         public FromWordpressToMarkdown()
         {
             _exportParser = new WordpressExportParser();
             _htmlToMarkdownConverter = new HtmlToMarkdownConverter();
-
         }
 
         public void Convert(string exportPath)
         {
             string blogExport = File.ReadAllText(exportPath);
 
-            var blogEntries = _exportParser.Parse(blogExport);
+            List<BlogEntry> blogEntries = _exportParser.Parse(blogExport);
 
-            foreach (var blogEntry in blogEntries)
+            foreach (BlogEntry blogEntry in blogEntries)
             {
                 string publicationStatus = null;
                 switch (blogEntry.Status)
@@ -38,19 +38,25 @@ namespace BlogExporter
                     case "trash":
                         publicationStatus = "private";
                         break;
-
                 }
 
                 if (false == string.IsNullOrWhiteSpace(publicationStatus))
                 {
-                    var fullPath = GetFullPath(blogEntry);
+                    string fullPath = GetFullPath(blogEntry);
+
+                    string directoryPath = Path.GetDirectoryName(fullPath);
+                    if (false == string.IsNullOrWhiteSpace(directoryPath) &&
+                        false == Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
 
                     if (File.Exists(fullPath))
                     {
                         File.Delete(fullPath);
                     }
 
-                    var file = File.CreateText(fullPath);
+                    StreamWriter file = File.CreateText(fullPath);
 
                     WriteHeader(file, blogEntry, publicationStatus);
                     WriteContent(file, blogEntry);
@@ -65,7 +71,7 @@ namespace BlogExporter
         {
             if (false == string.IsNullOrWhiteSpace(blogEntry.Content))
             {
-                var markdown = _htmlToMarkdownConverter.Convert(blogEntry.Content);
+                string markdown = _htmlToMarkdownConverter.Convert(blogEntry.Content);
 
                 file.Write(markdown);
             }
@@ -73,7 +79,7 @@ namespace BlogExporter
 
         private static string GetFullPath(BlogEntry blogEntry)
         {
-            var postDate = DateTime.Parse(blogEntry.PostDate).Date.ToShortDateString();
+            string postDate = DateTime.Parse(blogEntry.PostDate).Date.ToShortDateString();
             string postName;
 
             if (string.IsNullOrWhiteSpace(blogEntry.PostName))
@@ -84,9 +90,9 @@ namespace BlogExporter
             {
                 postName = blogEntry.PostName;
             }
-            var path = Environment.CurrentDirectory + @"\_posts\";
-            var fileName = string.Format("{0}-{1}.{2}", postDate, postName, "md");
-            var fullPath = path + fileName;
+            string path = Environment.CurrentDirectory + @"\_posts\";
+            string fileName = string.Format("{0}-{1}.{2}", postDate, postName, "md");
+            string fullPath = path + fileName;
             return fullPath;
         }
 
