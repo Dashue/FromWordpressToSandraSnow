@@ -1,4 +1,4 @@
-FromWordpressToMarkdown
+FromWordpressToSandraSnow
 =======================
 
-Convert wordpress blog export file to markdown files
+Convert wordpress blog export file to Sandra.Snow markdown files
