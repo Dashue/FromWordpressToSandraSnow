@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 
-namespace BlogExporter.ViewModels
+namespace FromWordpressToSandraSnow.ViewModels
 {
     public class MainViewModel : ReactiveObject
     {
@@ -11,10 +11,7 @@ namespace BlogExporter.ViewModels
             ConvertBlog = new ReactiveCommand(this.WhenAny(x => x.Path, s => false == string.IsNullOrWhiteSpace(s.Value)));
 
 
-            ConvertBlog.Subscribe(param =>
-                {
-                    _wordPressToMarkdown.Convert(Path);
-                });
+            ConvertBlog.Subscribe(param => _wordPressToMarkdown.Convert(Path));
         }
 
         private string _path;

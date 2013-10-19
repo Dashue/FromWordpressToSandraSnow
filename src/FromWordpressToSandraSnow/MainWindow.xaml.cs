@@ -1,8 +1,8 @@
-﻿using BlogExporter.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Forms;
+using FromWordpressToSandraSnow.ViewModels;
 
-namespace BlogExporter
+namespace FromWordpressToSandraSnow
 {
     public partial class MainWindow : Window
     {

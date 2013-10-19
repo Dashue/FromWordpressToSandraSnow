@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BlogExporter.Properties
+namespace FromWordpressToSandraSnow.Properties
 {
 
 
