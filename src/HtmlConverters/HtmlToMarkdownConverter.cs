@@ -79,12 +79,12 @@ namespace HtmlConverters
                     lastItem = Regex.Replace(lastItem, @"\s*\n\n\s*$", "\n\n");
                     block = "";
                 }
-                else if (Regex.IsMatch(@"\s*\n\s*$", lastItem))
+                else if (Regex.IsMatch(lastItem, @"\s*\n\s*$"))
                 {
                     lastItem = Regex.Replace(lastItem, @"\s*\n\s*$", "\n");
                     block = "\n";
                 }
-                else if (Regex.IsMatch(@"\s+$", lastItem))
+                else if (Regex.IsMatch(lastItem, @"\s+$"))
                 {
                     block = "\n\n";
                 }
